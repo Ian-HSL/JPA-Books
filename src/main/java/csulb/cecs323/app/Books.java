@@ -63,7 +63,7 @@ public class Books {
       EntityManagerFactory factory = Persistence.createEntityManagerFactory("Books");
       EntityManager manager = factory.createEntityManager();
       // Create an instance of CarClub and store our new EntityManager as an instance variable.
-      Books carclub = new Books(manager);
+      Books books = new Books(manager);
 
 
       // Any changes to the database need to be done within a transaction.
@@ -76,6 +76,31 @@ public class Books {
       // List of owners that I want to persist.  I could just as easily done this with the seed-data.sql
       // Load up my List with the Entities that I want to persist.  Note, this does not put them
       // into the database.
+
+      // TODO: Add new objects
+      //          Add new authoring entity instance
+      //             Writing group
+      //             Individual author
+      //             Ad Hoc team
+      //             Add an individual author to existing ad hoc team
+      //          Add a new publisher
+      //          Add a new book
+      //       List all the information about a specific object
+      //          Publisher
+      //          Book
+      //          Writing group
+      //       Delete a book
+      //          prompt for all elements of candidate key
+      //          make sure book exists
+      //       Update a book
+      //          change the authoring entity for existing book
+      //       List the primary key of all rows of
+      //          publishers
+      //          books
+      //             show title and isbn
+      //          authoring entities
+
+      System.out.println("Testing");
 
 
       // Commit the changes so that the new data persists and is visible to other users.
@@ -104,4 +129,4 @@ public class Books {
          LOGGER.info("Persisted object after flush (non-null id): " + next);
       }
    } // End of createEntity member method
-} // End of CarClub class
+} // End of Books class
