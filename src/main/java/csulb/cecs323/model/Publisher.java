@@ -10,7 +10,7 @@ import java.util.List;
 /**This is the publisher of books */
 
 @Entity
-
+@Table(name = "Publishers")
 public class Publisher {
 
     /**This denotes the list of books this publisher has published so far*/

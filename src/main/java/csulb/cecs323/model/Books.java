@@ -7,6 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+@NamedNativeQuery(
+        name = "getAllBooks",
+        query = "SELECT * " +
+                "FROM books ",
+        resultClass = Books.class
+)
+
 @Entity
 
 @Table(
@@ -101,5 +108,11 @@ public class Books {
         //inherits FK
         this.AE = AE;
         this.pub = pub;
+    }
+
+    @Override
+    public String toString(){
+        return  "ISBN: " + ISBN + "\n" +
+                "Title: " + title + "\n";
     }
 }

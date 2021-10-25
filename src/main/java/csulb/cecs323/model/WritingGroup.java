@@ -7,6 +7,7 @@ import javax.persistence.Table;
 
 @Entity//(name = "WritingGroup")
 @DiscriminatorValue(value = "WritingGroup")
+@Table(name = "Writing_Group")
 public class WritingGroup extends AuthoringEntity
 {
     public String getHead_writer() {

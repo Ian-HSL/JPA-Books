@@ -5,7 +5,7 @@ import java.util.List;
 
 /**This class represents the types of authors, namely authoring entity, that has been writing books*/
 @Entity
-@Table(name = "AuthoringEntity")
+@Table(name = "Authoring_Entities")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="authoring_entity_type")
 public class AuthoringEntity
@@ -88,7 +88,7 @@ public class AuthoringEntity
     /** The AuthoringEntity's inheritence type (will be defined by its subclasses) */
     private String authoring_entity_type;
 
-    @Column(nullable = false, length = 80)
+    @Column(nullable = false, length = 80, name = "entity_name")
     /** The AuthoringEnttity's full name. */
     private String name;
 

@@ -19,8 +19,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 /**
@@ -32,13 +32,13 @@ import java.util.logging.Logger;
  *     Originally provided by Dr. Alvaro Monge of CSULB, and subsequently modified by Dave Brown.
  * </p>
  */
-public class Books {
+public class BooksApp {
    /**
     * You will likely need the entityManager in a great many functions throughout your application.
     * Rather than make this a global variable, we will make it an instance variable within the CarClub
     * class, and create an instance of CarClub in the main.
     */
-   private EntityManager entityManager;
+   private static EntityManager entityManager;
 
    /**
     * The Logger can easily be configured to log to a file, rather than, or in addition to, the console.
@@ -54,23 +54,32 @@ public class Books {
     * for use later in the application.
     * @param manager    The EntityManager that we will use.
     */
-   public Books(EntityManager manager) {
+   public BooksApp(EntityManager manager) {
       this.entityManager = manager;
    }
+
+   private static List<Books> bookList;
 
    public static void main(String[] args) {
       LOGGER.fine("Creating EntityManagerFactory and EntityManager");
       EntityManagerFactory factory = Persistence.createEntityManagerFactory("Books");
       EntityManager manager = factory.createEntityManager();
       // Create an instance of CarClub and store our new EntityManager as an instance variable.
-      Books books = new Books(manager);
+      BooksApp booksApp = new BooksApp(manager);
 
+      bookList = getAllBooks(entityManager);
+
+      if (bookList.size() == 0){
+         System.out.println("Empty list");
+      }
 
       // Any changes to the database need to be done within a transaction.
       // See: https://en.wikibooks.org/wiki/Java_Persistence/Transactions
 
       LOGGER.fine("Begin of Transaction");
       EntityTransaction tx = manager.getTransaction();
+
+      Scanner scanner = new Scanner(System.in);
 
       tx.begin();
       // List of owners that I want to persist.  I could just as easily done this with the seed-data.sql
@@ -100,9 +109,7 @@ public class Books {
       //             show title and isbn
       //          authoring entities
 
-      System.out.println("Testing");
-
-
+      deleteBook(manager, scanner);
       // Commit the changes so that the new data persists and is visible to other users.
       tx.commit();
       LOGGER.fine("End of Transaction");
@@ -129,4 +136,34 @@ public class Books {
          LOGGER.info("Persisted object after flush (non-null id): " + next);
       }
    } // End of createEntity member method
+
+   private static List<Books> getAllBooks(EntityManager manager){
+      return manager.createNamedQuery("getAllBooks", Books.class).getResultList();
+   }
+
+   public static void deleteBook(EntityManager manager, Scanner scanner) {
+      boolean remove = true;
+
+      while (remove) {
+
+         System.out.println("Select book to delete: ");
+         for (Books book : bookList) {
+            System.out.println(book);
+         }
+
+         int choice = scanner.nextInt();
+
+         if(choice == -1){
+            remove = false;
+         }
+
+         bookList.remove(choice);
+      }
+   }
+
+   public void updateBook(){
+
+   }
+
+
 } // End of Books class
