@@ -7,6 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+//@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
+//        {"first_name", "last_name", "phone"})})
+@Entity
+
 @NamedNativeQuery(
         name = "getAllBooks",
         query = "SELECT * " +
@@ -14,17 +18,11 @@ import javax.persistence.UniqueConstraint;
         resultClass = Books.class
 )
 
-@Entity
-
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames =
-        {"title", "publisher_name"}),
+                {"title", "publisher_name"}),
                 @UniqueConstraint(columnNames = {"title","authoring_entity_name"})}
 )
-
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
-//        {"first_name", "last_name", "phone"})})
-
 public class Books {
     public AuthoringEntity getAE() {
         return AE;
@@ -99,7 +97,7 @@ public class Books {
     //Constructors
     public Books(){};
 
-    public Books(String ISBN,  String title, int year_published,AuthoringEntity AE, Publisher pub)
+    public Books(String ISBN,  String title, int year_published, AuthoringEntity AE, Publisher pub)
     {
         this.ISBN=ISBN;
         this.title= title;
@@ -113,6 +111,6 @@ public class Books {
     @Override
     public String toString(){
         return  "ISBN: " + ISBN + "\n" +
-                "Title: " + title + "\n";
+                "Title: " + title;
     }
 }

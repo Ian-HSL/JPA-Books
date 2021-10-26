@@ -62,12 +62,12 @@ public class BooksApp {
 
    public static void main(String[] args) {
       LOGGER.fine("Creating EntityManagerFactory and EntityManager");
-      EntityManagerFactory factory = Persistence.createEntityManagerFactory("Books");
+      EntityManagerFactory factory = Persistence.createEntityManagerFactory("BooksApp");
       EntityManager manager = factory.createEntityManager();
       // Create an instance of CarClub and store our new EntityManager as an instance variable.
       BooksApp booksApp = new BooksApp(manager);
 
-      bookList = getAllBooks(entityManager);
+      bookList = getBooks();
 
       if (bookList.size() == 0){
          System.out.println("Empty list");
@@ -137,8 +137,8 @@ public class BooksApp {
       }
    } // End of createEntity member method
 
-   private static List<Books> getAllBooks(EntityManager manager){
-      return manager.createNamedQuery("getAllBooks", Books.class).getResultList();
+   private static List<Books> getBooks(){
+      return entityManager.createNamedQuery("getAllBooks", Books.class).getResultList();
    }
 
    public static void deleteBook(EntityManager manager, Scanner scanner) {
@@ -146,22 +146,30 @@ public class BooksApp {
 
       while (remove) {
 
-         System.out.println("Select book to delete: ");
+         System.out.println("Select book to delete(0 to quit): ");
+         int i = 0;
          for (Books book : bookList) {
-            System.out.println(book);
+            System.out.printf("%d. %s, %s%n", i + 1, book.getISBN(), book.getTitle());
+            i++;
          }
 
          int choice = scanner.nextInt();
 
-         if(choice == -1){
-            remove = false;
+         while(choice < 0 || choice > bookList.size()){
+            System.out.printf("Please enter a valid number(1-%d): ", bookList.size());
+            choice = scanner.nextInt();
          }
 
-         bookList.remove(choice);
+         if(choice == 0){
+            remove = false;
+         } else {
+            manager.remove(bookList.get(choice - 1));
+            System.out.println("Book has been removed. ");
+         }
       }
    }
 
-   public void updateBook(){
+   public static void updateBook(){
 
    }
 

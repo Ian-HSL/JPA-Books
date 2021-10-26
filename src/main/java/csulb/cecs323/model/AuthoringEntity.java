@@ -7,10 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "Authoring_Entities")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="authoring_entity_type")
+@DiscriminatorColumn(name="authoring_entity_type", discriminatorType = DiscriminatorType.STRING)
 public class AuthoringEntity
 {
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy="AE",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
@@ -24,13 +23,13 @@ public class AuthoringEntity
     public void setBooks(List<Books> books) {
         this.books = books;
     }
+
     //adds a single book to this authoringentity.
     public void addBooks(Books book)
     {
         if(books.contains(book))
         {
             System.out.println(">ERROR>This book is already recorded...");
-            return;
         }
         else
         {   System.out.println("Added " + book.getTitle() + " - BY - " + getName() );
@@ -56,11 +55,11 @@ public class AuthoringEntity
     }
 
     public String getName() {
-        return name;
+        return entityName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.entityName = name;
     }
 
 //    public String getHead_writer() {
@@ -88,9 +87,9 @@ public class AuthoringEntity
     /** The AuthoringEntity's inheritence type (will be defined by its subclasses) */
     private String authoring_entity_type;
 
-    @Column(nullable = false, length = 80, name = "entity_name")
+    @Column(nullable = false, length = 80, name = "name")
     /** The AuthoringEnttity's full name. */
-    private String name;
+    private String entityName;
 
     //Only default constructor made. We never make an authoring entitiy, but I'm not sure
     //if we make it abstract or not. :P
