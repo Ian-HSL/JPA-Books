@@ -23,9 +23,11 @@ public class AdHocTeams extends AuthoringEntity {
 
     @Override
     public String toString() {
+        String mail = String.format("%-20s",this.getEmail());
+        String name = String.format("%-20s", this.getName());
         return "AdHocTeams{ " +
-                "Email= " + this.getEmail() + " " +
-                "Name= " + this.getName() + " " ;
+                "Email= " + mail + " | " +
+                "Name= " + name + " }" ;
     }
 
     /**Maps the adhocteam to many authors. So it denotes that

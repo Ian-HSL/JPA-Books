@@ -110,7 +110,11 @@ public class Books {
 
     @Override
     public String toString(){
-        return  "ISBN: " + ISBN + "\n" +
-                "Title: " + title;
+        String is = String.format("%-20s", ISBN);
+        String t = String.format("%-20s", title);
+        return  "ISBN: " + is + " | " +
+                "Title: " + t + "\n" +
+                "AE: " + AE.toString() +"\n" +
+                "Publisher: " + pub.toString() +"\n------------------------------------------";
     }
 }

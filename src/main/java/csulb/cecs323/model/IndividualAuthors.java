@@ -51,8 +51,10 @@ public class IndividualAuthors extends AuthoringEntity {
 
     @Override
     public String toString() {
+        String mail = String.format("%-20s",this.getEmail());
+        String name = String.format("%-20s", this.getName());
         return "IndividualAuthors{ " +
-        "Email= " + this.getEmail() + " " +
-                "Name= " + this.getName() + " " ;
+                "Email= " + mail + " | " +
+                "Name= " + name + " }" ;
     }
 }

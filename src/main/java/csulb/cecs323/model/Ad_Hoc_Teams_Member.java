@@ -44,5 +44,16 @@ public class Ad_Hoc_Teams_Member
         this.AHT = aht;
     }
 
+    @Override
+    public String toString() {
+//        String ia = String.format("%40s", IA);
+//        String aht = String.format("%40s", AHT);
+        return "Ad_Hoc_Teams_Member{" +
+                ", IndividualAuthor=" + IA + " | " +
+                ", AdHocTeamName=" + AHT +
+                '}';
+
+    }
+
 
 }

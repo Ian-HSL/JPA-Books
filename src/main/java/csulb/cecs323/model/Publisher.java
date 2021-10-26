@@ -94,4 +94,16 @@ public class Publisher {
         this.email = email;
         this.phone = phone;
     }
+
+    @Override
+    public String toString() {
+        String mail = String.format("%-20s",email);
+        String n = String.format("%-20s", name);
+        String p = String.format("%-20s", phone);
+        return "Publisher{" +
+                ", name='" + n + " | " +
+                ", phone='" + p + " | " +
+                ", email='" + mail + " " +
+                '}';
+    }
 }

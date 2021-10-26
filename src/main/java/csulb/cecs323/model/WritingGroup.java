@@ -49,11 +49,15 @@ public class WritingGroup extends AuthoringEntity
 
     @Override
     public String toString() {
+        String n = String.format("%-20s", this.getName());
+        String e = String.format("%-20s", this.getEmail());
+        String hw = String.format("%-20s", head_writer);
+
         return "WritingGroup{" +
-                "Email= " + this.getEmail() + " " +
-                "Name= " + this.getName() + " " +
-                "head_writer='" + head_writer + '\'' +
-                ", year_formed=" + year_formed +
+                "Email= " + this.getEmail() + " | " +
+                "Name= " + n + " | " +
+                "head_writer= " + head_writer + " | " +
+                "year_formed= " + year_formed +
                 '}';
     }
 }
