@@ -141,7 +141,11 @@ public class BooksApp {
       return entityManager.createNamedQuery("getAllBooks", Books.class).getResultList();
    }
 
-   public static void deleteBook(EntityManager manager, Scanner scanner) {
+   private static void addBook(){
+
+   }
+
+   private static void deleteBook(EntityManager manager, Scanner scanner) {
       boolean remove = true;
 
       while (remove) {
@@ -169,7 +173,7 @@ public class BooksApp {
       }
    }
 
-   public static void updateBook(){
+   private static void updateBook(){
 
    }
 
