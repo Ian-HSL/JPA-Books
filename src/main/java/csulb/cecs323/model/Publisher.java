@@ -10,6 +10,14 @@ import java.util.List;
 /**This is the publisher of books */
 
 @Entity
+
+@NamedNativeQuery(
+        name = "getAllPubs",
+        query = "SELECT * " +
+                "FROM Publishers ",
+        resultClass = Publisher.class
+)
+
 @Table(name = "Publishers")
 public class Publisher {
 
@@ -35,16 +43,19 @@ public class Publisher {
     )
     /**The name of the publisher*/
     private String name;
+
+
     @Column(
             nullable = false,
-            length = 80,
+            length = 24,
             unique = true
     )
     /**The phone number you can reach this pubisher at*/
     private String phone;
+
     @Column(
             nullable = false,
-            length = 24,
+            length = 80,
             unique = true
     )
     /**The email of the publisher*/

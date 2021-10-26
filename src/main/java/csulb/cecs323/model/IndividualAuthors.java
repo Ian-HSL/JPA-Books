@@ -48,4 +48,11 @@ public class IndividualAuthors extends AuthoringEntity {
 
 
     }
+
+    @Override
+    public String toString() {
+        return "IndividualAuthors{ " +
+        "Email= " + this.getEmail() + " " +
+                "Name= " + this.getName() + " " ;
+    }
 }

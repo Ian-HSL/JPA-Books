@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity//(name = "WritingGroup")
-@DiscriminatorValue(value = "Writing Group")
+@DiscriminatorValue(value = "WritingGroup")
 public class WritingGroup extends AuthoringEntity
 {
     public String getHead_writer() {
@@ -45,5 +45,15 @@ public class WritingGroup extends AuthoringEntity
         super.setName(name);
         this.head_writer = head_writer;
         this.year_formed = year_formed;
+    }
+
+    @Override
+    public String toString() {
+        return "WritingGroup{" +
+                "Email= " + this.getEmail() + " " +
+                "Name= " + this.getName() + " " +
+                "head_writer='" + head_writer + '\'' +
+                ", year_formed=" + year_formed +
+                '}';
     }
 }

@@ -59,6 +59,11 @@ public class BooksApp {
    }
 
    private static List<Books> bookList;
+   private static List<Publisher> publisherList;
+   private static List<AuthoringEntity> AEList;
+
+   private static List<AuthoringEntity> AHTList;
+   private static List<AuthoringEntity> individualAuthorsList;
 
    public static void main(String[] args) {
       LOGGER.fine("Creating EntityManagerFactory and EntityManager");
@@ -68,9 +73,25 @@ public class BooksApp {
       BooksApp booksApp = new BooksApp(manager);
 
       bookList = getBooks();
+      publisherList = getPublishers();
+      AEList = getAEs();
+      individualAuthorsList = getIndividualAuthors();
+      AHTList = getAdHocTeams();
 
       if (bookList.size() == 0){
          System.out.println("Empty list");
+      }
+      if (publisherList.size() == 0){
+         System.out.println("Empty pub list");
+      }
+      if (AEList.size() == 0){
+         System.out.println("Empty AE list");
+      }
+      if (individualAuthorsList.size() == 0){
+         System.out.println("Empty individual authors list");
+      }
+      if (AHTList.size() == 0){
+         System.out.println("Empty aht list");
       }
 
       // Any changes to the database need to be done within a transaction.
@@ -85,6 +106,309 @@ public class BooksApp {
       // List of owners that I want to persist.  I could just as easily done this with the seed-data.sql
       // Load up my List with the Entities that I want to persist.  Note, this does not put them
       // into the database.
+
+      System.out.println("1. Add new objects: \n2. List information " +
+              "\n3. Delete a book \n4. Update a book\n5. List primary keys");
+
+      Scanner in = new Scanner(System.in);
+      int menuChoice = booksApp.checkInput(1,5);
+      switch(menuChoice)
+      {
+         //add something
+         case 1:
+         {
+            System.out.println("1. Add new Authoring Entity\n2. Add a new publisher\n3. Add a new book");
+            int addSomethingChoice = booksApp.checkInput(1,3);
+            switch(addSomethingChoice)
+            {
+               //add AE
+               case 1:
+               {
+                  System.out.println("Add an authoring entity: ");
+                  System.out.println("1. Add WritingGroup\n2. Add Individual Author\n3. Add Ad Hoc Team\n4. Add an individual author to an existing Ad Hoc Team");
+                  int aeType = booksApp.checkInput(1,4);
+                  switch(aeType)
+                  {
+                     case 1:
+                     {
+                        System.out.println("Add a WritingGroup! : ");
+
+                        try{
+                           System.out.println("Name: ");
+                           String name = in.nextLine();
+
+                           System.out.println("Email: ");
+                           String email = in.nextLine();
+
+                           System.out.println("Head Writer: ");
+                           String HW = in.nextLine();
+
+                           System.out.println("Year formed:  ");
+                           int year = in.nextInt();
+
+                           WritingGroup w = new WritingGroup(email,name,HW,year);
+                           BooksApp.entityManager.persist(w);
+                           BooksApp.entityManager.flush();
+
+
+                        }catch (Exception e)
+                        {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                        }
+
+
+
+
+                        //make WG
+                        //ask for name, email,
+                        //head writer
+                        //year
+                        break;
+                     }
+                     case 2:
+                     {
+                        //make IA
+                        //ask name, email
+                        System.out.println("Add an Individual Author! : ");
+
+                        try{
+
+                           System.out.println("Name: ");
+                           String name = in.nextLine();
+
+                           System.out.println("Email: ");
+                           String email = in.nextLine();
+
+                           IndividualAuthors w = new IndividualAuthors(email,name);
+                           BooksApp.entityManager.persist(w);
+                           BooksApp.entityManager.flush();
+
+
+                        }catch (Exception e)
+                        {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                        }
+
+                        break;
+                     }
+                     case 3:
+                     {
+                        //make AHT
+                        //ask name, email
+                        System.out.println("Add an Ad Hoc Team Group! : ");
+
+                        try{
+                           System.out.println("Name: ");
+                           String name = in.nextLine();
+
+                           System.out.println("Email: ");
+                           String email = in.nextLine();
+
+                           AdHocTeams w = new AdHocTeams(email,name);
+                           BooksApp.entityManager.persist(w);
+                           BooksApp.entityManager.flush();
+
+
+                        }catch (Exception e)
+                        {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                        }
+
+                        break;
+                     }
+                     case 4:
+                     {
+                        System.out.println("Add individual author to ad hoc teams: ");
+
+                        if (individualAuthorsList.size() == 0){
+                           System.out.println("Empty individual authors list. Please add an individual author first");
+                           break;
+                        }
+                        if (AHTList.size() == 0){
+                           System.out.println("Empty aht list. Please add an ad hoc team first.");
+                           break;
+                        }
+
+                        try {
+
+                           System.out.println("Select an indivdual Author: ");
+                           AuthoringEntity ia = booksApp.selectAE(individualAuthorsList);
+
+                           System.out.println("Select an AdHocTeam: ");
+                           AuthoringEntity aht = booksApp.selectAE(AHTList);
+
+                           Ad_Hoc_Teams_Member newMember = new Ad_Hoc_Teams_Member((AdHocTeams) aht, (IndividualAuthors) ia);
+
+                           booksApp.entityManager.persist(newMember);
+                           booksApp.entityManager.flush();
+                        }catch (Exception e)
+                        {
+                           System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                        }
+
+
+
+
+
+                        break;
+                     }
+                  }
+                  break;
+               }
+               //add publisher
+               case 2:
+               {
+                  System.out.println("Add a publisher: ");
+
+
+                  //need to error handle. might put in a function.
+                  //ask for name
+
+                  //ask for phone
+
+                  //ask for email
+                  try {
+
+                     System.out.println("Name: ");
+                     String name = in.nextLine();
+
+                     System.out.println("Phone: ");
+                     String phone = in.nextLine();
+
+                     System.out.println("Email: ");
+                     String email = in.nextLine();
+
+                    Publisher w = new Publisher(name,phone,email);
+                     BooksApp.entityManager.persist(w);
+                     BooksApp.entityManager.flush();
+
+                  }catch (Exception e)
+                  {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                  }
+
+
+                  break;
+               }
+               //add book
+               case 3:
+               {
+                  System.out.println("Add a book: ");
+                  //put list of publishers
+                  if (publisherList.size() == 0){
+                     System.out.println("Empty publisher list, so add a publisher first! Thank you!");
+                     break;
+                  }
+//
+                  if (AEList.size() == 0){
+                     System.out.println("Empty AE list, so add an authoring entity first! Thank you!");
+                     break;
+                  }
+                  Publisher p = booksApp.selectPublisher(publisherList);
+
+                  AuthoringEntity ae = booksApp.selectAE(AEList);
+
+                  //select a publisher.
+
+                  //pust a list of ae's
+
+                  //select ae
+
+                  //ask for book stuff
+                  //might need some error handling. might put in a function.
+                  try{
+                  String ISBN;
+                  System.out.println("ISBN: ");
+                  ISBN = in.next();
+                  in.nextLine();
+                  System.out.println("Title: ");
+                  String title;
+                  title= in.nextLine();
+                  System.out.println("Year published: ");
+                  int year;
+                  year = in.nextInt();
+                  in.nextLine();
+
+                  Books b = new Books(ISBN, title, year, ae, p);
+
+                  booksApp.entityManager.persist(b);
+                     booksApp.entityManager.flush();
+                  }catch (Exception e)
+                  {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
+                  }
+
+
+
+                  break;
+               }
+            }
+
+            break;
+         }
+         //list info about object
+         case 2:
+         {
+            System.out.println("Listing information about: ");
+            int listMenuChoice = booksApp.checkInput(1,3);
+            switch(listMenuChoice)
+            {
+               //show list of publishers and select one?
+               case 1:
+               {
+                  break;
+               }
+               //show list of books and select one?
+               case 2:
+               {
+                  break;
+               }
+               //show list of writing groups and select 1?
+               case 3:
+               {
+                  break;
+               }
+            }
+            break;
+         }
+
+         //delete book
+         case 3:
+         {
+            break;
+         }
+
+         //update book
+         case 4:
+         {
+            //show list of books. and select 1.
+
+            System.out.println("New AE for book: ");
+            break;
+         }
+         //list the primary key of all rows of something
+         case 5:
+         {
+            System.out.println("1. Publishers\n2. Books(title + ISBN)\n3. Authoring entites(w/type)");
+            int primaryKeyInfoChoice = booksApp.checkInput(1,3);
+
+            switch(primaryKeyInfoChoice)
+            {
+               //publishers
+               case 1:
+               {
+                  break;
+               }
+               //books
+               case 2:
+               {
+                  break;
+               }
+               //authoring entities
+               case 3:
+               {
+                  break;
+               }
+            }
+            break;
+         }
+      }
+
 
       // TODO: Add new objects
       //          Add new authoring entity instance
@@ -111,7 +435,12 @@ public class BooksApp {
 
       deleteBook(manager, scanner);
       // Commit the changes so that the new data persists and is visible to other users.
-      tx.commit();
+      try {
+         tx.commit();
+      }
+      catch(Exception e){
+         System.out.println("?");
+      }
       LOGGER.fine("End of Transaction");
 
    } // End of the main method
@@ -139,6 +468,22 @@ public class BooksApp {
 
    private static List<Books> getBooks(){
       return entityManager.createNamedQuery("getAllBooks", Books.class).getResultList();
+   }
+
+   private static List<Publisher> getPublishers(){
+      return entityManager.createNamedQuery("getAllPubs", Publisher.class).getResultList();
+   }
+
+   private static List<AuthoringEntity> getAEs(){
+      return entityManager.createNamedQuery("getAllAE", AuthoringEntity.class).getResultList();
+   }
+
+   private static List<AuthoringEntity> getAdHocTeams(){
+      return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"AdHocTeams").getResultList();
+   }
+
+   private static List<AuthoringEntity> getIndividualAuthors(){
+      return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"IndividualAuthors").getResultList();
    }
 
    private static void addBook(){
@@ -174,6 +519,93 @@ public class BooksApp {
    }
 
    private static void updateBook(){
+
+   }
+
+   public int checkInput(int low, int high)
+   {
+
+
+      Scanner in = new Scanner(System.in);
+
+      int returnedInt = -1;
+      while(returnedInt< low || returnedInt > high)
+      {
+         System.out.println("Select Choice: ");
+
+         if (in.hasNextInt())
+         {
+            System.out.println("Hi");
+            returnedInt = in.nextInt();
+            if (returnedInt < low || returnedInt > high)
+            {
+               System.out.println("Bad input. Try again.");
+               returnedInt = -1;
+            }
+            in.nextLine();
+         }
+         else {
+            if(in.hasNextLine()) {
+               in.nextLine();
+            }
+         }
+
+
+      }
+
+
+      return returnedInt;
+   }
+
+   public Publisher selectPublisher (List<Publisher> pubs)
+   {
+      System.out.println("Publishers:");
+      for (int i  = 0; i < pubs.size(); i++)
+      {
+         System.out.println(i + " " + pubs.get(i));
+      }
+
+      Scanner in = new Scanner(System.in);
+      int pickedPub = -1;
+      while(pickedPub < 0 || pickedPub >= pubs.size()) {
+         System.out.println("Enter Selection: ");
+         pickedPub = in.nextInt();
+      }
+      System.out.println(pickedPub + ": " + pubs.get(pickedPub));
+      return pubs.get(pickedPub);
+
+   }
+
+   public AuthoringEntity selectAE (List<AuthoringEntity> AE)
+   {
+      System.out.println("Authoring Entity:");
+      for (int i  = 0; i < AE.size(); i++)
+      {
+         if(AE.get(i) instanceof WritingGroup)
+         {
+
+            System.out.println(i + " " + ((WritingGroup) AE.get(i)));
+         }
+         if(AE.get(i) instanceof IndividualAuthors)
+         {
+
+            System.out.println(i + " " + ((IndividualAuthors) AE.get(i)));
+         }
+         if(AE.get(i) instanceof AdHocTeams)
+         {
+
+            System.out.println(i + " " + ((AdHocTeams) AE.get(i)));
+         }
+      }
+
+      Scanner in = new Scanner(System.in);
+      int pickedAE = -1;
+      while(pickedAE < 0 || pickedAE >= AE.size()) {
+         System.out.println("Enter Selection: ");
+         pickedAE = in.nextInt();
+      }
+      System.out.println(pickedAE + ": " + AE.get(pickedAE));
+      return AE.get(pickedAE);
 
    }
 

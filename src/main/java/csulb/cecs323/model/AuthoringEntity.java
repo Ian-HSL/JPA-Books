@@ -5,9 +5,25 @@ import java.util.List;
 
 /**This class represents the types of authors, namely authoring entity, that has been writing books*/
 @Entity
+
+
 @Table(name = "Authoring_Entities")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="authoring_entity_type", discriminatorType = DiscriminatorType.STRING)
+
+@NamedNativeQuery(
+        name = "getAllAE",
+        query = "SELECT * " +
+                "FROM Authoring_Entities ",
+        resultClass = AuthoringEntity.class
+)
+@NamedNativeQuery(
+        name = "getAllSpecificMembers",
+        query = "SELECT * " +
+                "FROM Authoring_Entities " +
+                "WHERE authoring_entity_type = ?",
+        resultClass = AuthoringEntity.class
+)
 public class AuthoringEntity
 {
     @OneToMany(fetch = FetchType.LAZY, mappedBy="AE",

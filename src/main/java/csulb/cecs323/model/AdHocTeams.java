@@ -21,6 +21,13 @@ public class AdHocTeams extends AuthoringEntity {
 
     }
 
+    @Override
+    public String toString() {
+        return "AdHocTeams{ " +
+                "Email= " + this.getEmail() + " " +
+                "Name= " + this.getName() + " " ;
+    }
+
     /**Maps the adhocteam to many authors. So it denotes that
      * The adhocteam is made up of many or one authors. */
     /**
