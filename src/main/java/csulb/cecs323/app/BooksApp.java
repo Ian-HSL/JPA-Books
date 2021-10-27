@@ -100,7 +100,8 @@ public class BooksApp {
       LOGGER.fine("Begin of Transaction");
       EntityTransaction tx = manager.getTransaction();
 
-      Scanner scanner = new Scanner(System.in);
+
+      Scanner in = new Scanner(System.in);
 
       tx.begin();
       // List of owners that I want to persist.  I could just as easily done this with the seed-data.sql
@@ -110,15 +111,15 @@ public class BooksApp {
       System.out.println("1. Add new objects: \n2. List information " +
               "\n3. Delete a book \n4. Update a book\n5. List primary keys");
 
-      Scanner in = new Scanner(System.in);
-      int menuChoice = booksApp.checkInput(1,5);
+
+      int menuChoice = booksApp.checkInput(in,1,5);
       switch(menuChoice)
       {
          //add something
          case 1:
          {
             System.out.println("1. Add new Authoring Entity\n2. Add a new publisher\n3. Add a new book");
-            int addSomethingChoice = booksApp.checkInput(1,3);
+            int addSomethingChoice = booksApp.checkInput(in,1,3);
             switch(addSomethingChoice)
             {
                //add AE
@@ -126,7 +127,7 @@ public class BooksApp {
                {
                   System.out.println("Add an authoring entity: ");
                   System.out.println("1. Add WritingGroup\n2. Add Individual Author\n3. Add Ad Hoc Team\n4. Add an individual author to an existing Ad Hoc Team");
-                  int aeType = booksApp.checkInput(1,4);
+                  int aeType = booksApp.checkInput(in,1,4);
                   switch(aeType)
                   {
                      case 1:
@@ -135,13 +136,13 @@ public class BooksApp {
 
                         try{
                            System.out.println("Name: ");
-                           String name = in.nextLine();
+                           String name = booksApp.checkStringLength(in,80);
 
                            System.out.println("Email: ");
-                           String email = in.nextLine();
+                           String email = booksApp.checkStringLength(in,30);
 
                            System.out.println("Head Writer: ");
-                           String HW = in.nextLine();
+                           String HW = booksApp.checkStringLength(in,80);
 
                            System.out.println("Year formed:  ");
                            int year = in.nextInt();
@@ -173,10 +174,10 @@ public class BooksApp {
                         try{
 
                            System.out.println("Name: ");
-                           String name = in.nextLine();
+                           String name = booksApp.checkStringLength(in,80);
 
                            System.out.println("Email: ");
-                           String email = in.nextLine();
+                           String email = booksApp.checkStringLength(in,30);
 
                            IndividualAuthors w = new IndividualAuthors(email,name);
                            BooksApp.entityManager.persist(w);
@@ -197,10 +198,10 @@ public class BooksApp {
 
                         try{
                            System.out.println("Name: ");
-                           String name = in.nextLine();
+                           String name = booksApp.checkStringLength(in,80);
 
                            System.out.println("Email: ");
-                           String email = in.nextLine();
+                           String email = booksApp.checkStringLength(in,30);
 
                            AdHocTeams w = new AdHocTeams(email,name);
                            BooksApp.entityManager.persist(w);
@@ -229,10 +230,10 @@ public class BooksApp {
                         try {
 
                            System.out.println("Select an indivdual Author: ");
-                           AuthoringEntity ia = booksApp.selectAE(individualAuthorsList);
+                           AuthoringEntity ia = booksApp.selectAE(in,individualAuthorsList);
 
                            System.out.println("Select an AdHocTeam: ");
-                           AuthoringEntity aht = booksApp.selectAE(AHTList);
+                           AuthoringEntity aht = booksApp.selectAE(in, AHTList);
 
                            Ad_Hoc_Teams_Member newMember = new Ad_Hoc_Teams_Member((AdHocTeams) aht, (IndividualAuthors) ia);
 
@@ -267,13 +268,13 @@ public class BooksApp {
                   try {
 
                      System.out.println("Name: ");
-                     String name = in.nextLine();
+                     String name = booksApp.checkStringLength(in,80);
 
                      System.out.println("Phone: ");
-                     String phone = in.nextLine();
+                     String phone = booksApp.checkStringLength(in,24);
 
                      System.out.println("Email: ");
-                     String email = in.nextLine();
+                     String email = booksApp.checkStringLength(in,80);
 
                     Publisher w = new Publisher(name,phone,email);
                      BooksApp.entityManager.persist(w);
@@ -300,9 +301,9 @@ public class BooksApp {
                      System.out.println("Empty AE list, so add an authoring entity first! Thank you!");
                      break;
                   }
-                  Publisher p = booksApp.selectPublisher(publisherList);
+                  Publisher p = booksApp.selectPublisher(in,publisherList);
 
-                  AuthoringEntity ae = booksApp.selectAE(AEList);
+                  AuthoringEntity ae = booksApp.selectAE(in,AEList);
 
                   //select a publisher.
 
@@ -315,11 +316,11 @@ public class BooksApp {
                   try{
                   String ISBN;
                   System.out.println("ISBN: ");
-                  ISBN = in.next();
+                  ISBN = booksApp.checkStringLength(in,17);
                   in.nextLine();
                   System.out.println("Title: ");
                   String title;
-                  title= in.nextLine();
+                  title= booksApp.checkStringLength(in,80);
                   System.out.println("Year published: ");
                   int year;
                   year = in.nextInt();
@@ -345,7 +346,7 @@ public class BooksApp {
          case 2:
          {
             System.out.println("Listing information about: ");
-            int listMenuChoice = booksApp.checkInput(1,3);
+            int listMenuChoice = booksApp.checkInput(in,1,3);
             switch(listMenuChoice)
             {
                //show list of publishers and select one?
@@ -385,7 +386,7 @@ public class BooksApp {
          case 5:
          {
             System.out.println("1. Publishers\n2. Books(title + ISBN)\n3. Authoring entites(w/type)");
-            int primaryKeyInfoChoice = booksApp.checkInput(1,3);
+            int primaryKeyInfoChoice = booksApp.checkInput(in,1,3);
 
             switch(primaryKeyInfoChoice)
             {
@@ -433,7 +434,7 @@ public class BooksApp {
       //             show title and isbn
       //          authoring entities
 
-      deleteBook(manager, scanner);
+      deleteBook(manager, in);
       // Commit the changes so that the new data persists and is visible to other users.
       try {
          tx.commit();
@@ -522,11 +523,11 @@ public class BooksApp {
 
    }
 
-   public int checkInput(int low, int high)
+   public int checkInput(Scanner in, int low, int high)
    {
 
 
-      Scanner in = new Scanner(System.in);
+      //Scanner in = new Scanner(System.in);
 
       int returnedInt = -1;
       while(returnedInt< low || returnedInt > high)
@@ -535,7 +536,7 @@ public class BooksApp {
 
          if (in.hasNextInt())
          {
-            System.out.println("Hi");
+            //System.out.println("Hi");
             returnedInt = in.nextInt();
             if (returnedInt < low || returnedInt > high)
             {
@@ -557,7 +558,7 @@ public class BooksApp {
       return returnedInt;
    }
 
-   public Publisher selectPublisher (List<Publisher> pubs)
+   public Publisher selectPublisher (Scanner in, List<Publisher> pubs)
    {
       System.out.println("Publishers:");
       for (int i  = 0; i < pubs.size(); i++)
@@ -565,7 +566,7 @@ public class BooksApp {
          System.out.println(i + " " + pubs.get(i));
       }
 
-      Scanner in = new Scanner(System.in);
+      //Scanner in = new Scanner(System.in);
       int pickedPub = -1;
       while(pickedPub < 0 || pickedPub >= pubs.size()) {
          System.out.println("Enter Selection: ");
@@ -576,7 +577,7 @@ public class BooksApp {
 
    }
 
-   public AuthoringEntity selectAE (List<AuthoringEntity> AE)
+   public AuthoringEntity selectAE (Scanner in, List<AuthoringEntity> AE)
    {
       System.out.println("Authoring Entity:");
       for (int i  = 0; i < AE.size(); i++)
@@ -598,7 +599,7 @@ public class BooksApp {
          }
       }
 
-      Scanner in = new Scanner(System.in);
+      //Scanner in = new Scanner(System.in);
       int pickedAE = -1;
       while(pickedAE < 0 || pickedAE >= AE.size()) {
          System.out.println("Enter Selection: ");
@@ -607,6 +608,20 @@ public class BooksApp {
       System.out.println(pickedAE + ": " + AE.get(pickedAE));
       return AE.get(pickedAE);
 
+   }
+
+   public String checkStringLength(Scanner in, int length)
+   {
+      String input;
+    do {
+       input = in.nextLine();
+       //in.nextLine();
+       if(input.length()> length || input.length() <= 0)
+       {
+          System.out.println("Your input length is too long for our database. Please Try again: ");
+       }
+    }while(input.length() > length || input.length() <= 0);
+    return input;
    }
 
 
