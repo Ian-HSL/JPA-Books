@@ -30,18 +30,18 @@ public class AuthoringEntity
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     /**List of books this authoring entity has written*/
-    private List<Books> books;
+    private List<Book> books;
 
-    public List<Books> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 
     //adds a single book to this authoringentity.
-    public void addBooks(Books book)
+    public void addBooks(Book book)
     {
         if(books.contains(book))
         {

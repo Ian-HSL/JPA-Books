@@ -13,11 +13,12 @@
 package csulb.cecs323.app;
 
 // Import all of the entity classes that we have written for this application.
+import csulb.cecs323.BusinessLayer.BusinessLayer;
+import csulb.cecs323.BusinessLayer.IBusinessLayer;
 import csulb.cecs323.model.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Scanner;
@@ -34,102 +35,79 @@ import java.util.logging.Logger;
  */
 public class BooksApp {
    /**
-    * You will likely need the entityManager in a great many functions throughout your application.
-    * Rather than make this a global variable, we will make it an instance variable within the CarClub
-    * class, and create an instance of CarClub in the main.
-    */
-   private static EntityManager entityManager;
-
-   /**
     * The Logger can easily be configured to log to a file, rather than, or in addition to, the console.
     * We use it because it is easy to control how much or how little logging gets done without having to
     * go through the application and comment out/uncomment code and run the risk of introducing a bug.
     * Here also, we want to make sure that the one Logger instance is readily available throughout the
     * application, without resorting to creating a global variable.
     */
-   private static final Logger LOGGER = Logger.getLogger(Books.class.getName());
+   private static final Logger LOGGER = Logger.getLogger(Book.class.getName());
 
-   /**
-    * The constructor for the CarClub class.  All that it does is stash the provided EntityManager
-    * for use later in the application.
-    * @param manager    The EntityManager that we will use.
-    */
-   public BooksApp(EntityManager manager) {
-      this.entityManager = manager;
-   }
-
-   private static List<Books> bookList;
+   private static List<Book> bookList;
    private static List<Publisher> publisherList;
    private static List<AuthoringEntity> AEList;
 
    private static List<AuthoringEntity> AHTList;
    private static List<AuthoringEntity> individualAuthorsList;
 
+   private static IBusinessLayer businessLayer;
+   private static Menu menu = new Menu();
+
    public static void main(String[] args) {
-      LOGGER.fine("Creating EntityManagerFactory and EntityManager");
+      // Create an instance of CarClub and store our new EntityManager as an instance variable
       EntityManagerFactory factory = Persistence.createEntityManagerFactory("BooksApp");
       EntityManager manager = factory.createEntityManager();
-      // Create an instance of CarClub and store our new EntityManager as an instance variable.
-      BooksApp booksApp = new BooksApp(manager);
 
-      bookList = getBooks();
-      publisherList = getPublishers();
-      AEList = getAEs();
-      individualAuthorsList = getIndividualAuthors();
-      AHTList = getAdHocTeams();
+      businessLayer = new BusinessLayer(manager);
+      bookList = businessLayer.getAllBooks();
+      publisherList = businessLayer.getAllPublishers();
+      //AEList = businessLayer.getAllAEs();
+    //  individualAuthorsList = businessLayer.getAllIndividualAuthors();
+      //AHTList = businessLayer.getAllAdHocTeams();
 
-      if (bookList.size() == 0){
-         System.out.println("Empty list");
-      }
-      if (publisherList.size() == 0){
-         System.out.println("Empty pub list");
-      }
-      if (AEList.size() == 0){
-         System.out.println("Empty AE list");
-      }
-      if (individualAuthorsList.size() == 0){
-         System.out.println("Empty individual authors list");
-      }
-      if (AHTList.size() == 0){
-         System.out.println("Empty aht list");
-      }
+      BooksApp booksApp = new BooksApp();
 
+      Book book = businessLayer.getBookByISBN("test");
+
+
+      booksApp.validateEmpty(bookList, "book");
+      /*
+      booksApp.validateEmpty(publisherList, "publisher");
+      booksApp.validateEmpty(AEList, "authoring entities");
+      booksApp.validateEmpty(individualAuthorsList, "individual authors");
+      booksApp.validateEmpty(AHTList, "ad hoc team");
+      //*/
       // Any changes to the database need to be done within a transaction.
       // See: https://en.wikibooks.org/wiki/Java_Persistence/Transactions
 
-      LOGGER.fine("Begin of Transaction");
-      EntityTransaction tx = manager.getTransaction();
+      //LOGGER.fine("Begin of Transaction");
 
 
-      Scanner in = new Scanner(System.in);
-
-      tx.begin();
+     // Scanner in = new Scanner(System.in);
       // List of owners that I want to persist.  I could just as easily done this with the seed-data.sql
       // Load up my List with the Entities that I want to persist.  Note, this does not put them
       // into the database.
 
-      System.out.println("1. Add new objects: \n2. List information " +
-              "\n3. Delete a book \n4. Update a book\n5. List primary keys");
-
-
+      //menu.displayOptions();
+/*
       int menuChoice = booksApp.checkInput(in,1,5);
       switch(menuChoice)
       {
          //add something
          case 1:
          {
-            System.out.println("1. Add new Authoring Entity\n2. Add a new publisher\n3. Add a new book");
+            menu.addEntity(in);
             int addSomethingChoice = booksApp.checkInput(in,1,3);
             switch(addSomethingChoice)
             {
                //add AE
                case 1:
                {
-                  System.out.println("Add an authoring entity: ");
-                  System.out.println("1. Add WritingGroup\n2. Add Individual Author\n3. Add Ad Hoc Team\n4. Add an individual author to an existing Ad Hoc Team");
+                  menu.addAuthoringEntity(in);
                   int aeType = booksApp.checkInput(in,1,4);
                   switch(aeType)
                   {
+                     // Add writing group
                      case 1:
                      {
                         System.out.println("Add a WritingGroup! : ");
@@ -148,16 +126,13 @@ public class BooksApp {
                            int year = in.nextInt();
 
                            WritingGroup w = new WritingGroup(email,name,HW,year);
-                           BooksApp.entityManager.persist(w);
-                           BooksApp.entityManager.flush();
+                           //BooksApp.entityManager.persist(w);
+                           //BooksApp.entityManager.flush();
 
 
                         }catch (Exception e)
                         {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
                         }
-
-
-
 
                         //make WG
                         //ask for name, email,
@@ -165,6 +140,7 @@ public class BooksApp {
                         //year
                         break;
                      }
+                     // Add inidividual author
                      case 2:
                      {
                         //make IA
@@ -180,8 +156,8 @@ public class BooksApp {
                            String email = booksApp.checkStringLength(in,30);
 
                            IndividualAuthors w = new IndividualAuthors(email,name);
-                           BooksApp.entityManager.persist(w);
-                           BooksApp.entityManager.flush();
+                           //businessLayer..persist(w);
+                           //BooksApp.entityManager.flush();
 
 
                         }catch (Exception e)
@@ -190,6 +166,7 @@ public class BooksApp {
 
                         break;
                      }
+                     // Add ad hoc team
                      case 3:
                      {
                         //make AHT
@@ -204,9 +181,8 @@ public class BooksApp {
                            String email = booksApp.checkStringLength(in,30);
 
                            AdHocTeams w = new AdHocTeams(email,name);
-                           BooksApp.entityManager.persist(w);
-                           BooksApp.entityManager.flush();
-
+                           //BooksApp.entityManager.persist(w);
+                           //BooksApp.entityManager.flush();
 
                         }catch (Exception e)
                         {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
@@ -214,6 +190,7 @@ public class BooksApp {
 
                         break;
                      }
+                     // Add author to existing ad hoc team
                      case 4:
                      {
                         System.out.println("Add individual author to ad hoc teams: ");
@@ -237,16 +214,12 @@ public class BooksApp {
 
                            Ad_Hoc_Teams_Member newMember = new Ad_Hoc_Teams_Member((AdHocTeams) aht, (IndividualAuthors) ia);
 
-                           booksApp.entityManager.persist(newMember);
-                           booksApp.entityManager.flush();
+                           //entityManager.persist(newMember);
+                          // entityManager.flush();
                         }catch (Exception e)
                         {
                            System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
                         }
-
-
-
-
 
                         break;
                      }
@@ -277,8 +250,8 @@ public class BooksApp {
                      String email = booksApp.checkStringLength(in,80);
 
                     Publisher w = new Publisher(name,phone,email);
-                     BooksApp.entityManager.persist(w);
-                     BooksApp.entityManager.flush();
+                     //BooksApp.entityManager.persist(w);
+                     //BooksApp.entityManager.flush();
 
                   }catch (Exception e)
                   {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
@@ -328,13 +301,11 @@ public class BooksApp {
 
                   Books b = new Books(ISBN, title, year, ae, p);
 
-                  booksApp.entityManager.persist(b);
-                     booksApp.entityManager.flush();
+                  //entityManager.persist(b);
+                  //entityManager.flush();
                   }catch (Exception e)
                   {System.out.println("Error. Already in database or incorrect information. Please Try again Later.");
                   }
-
-
 
                   break;
                }
@@ -342,6 +313,7 @@ public class BooksApp {
 
             break;
          }
+
          //list info about object
          case 2:
          {
@@ -371,6 +343,7 @@ public class BooksApp {
          //delete book
          case 3:
          {
+            deleteBook(in);
             break;
          }
 
@@ -382,6 +355,7 @@ public class BooksApp {
             System.out.println("New AE for book: ");
             break;
          }
+
          //list the primary key of all rows of something
          case 5:
          {
@@ -433,25 +407,25 @@ public class BooksApp {
       //          books
       //             show title and isbn
       //          authoring entities
-
-      deleteBook(manager, in);
       // Commit the changes so that the new data persists and is visible to other users.
       try {
-         tx.commit();
+         //tx.commit();
       }
       catch(Exception e){
          System.out.println("?");
       }
       LOGGER.fine("End of Transaction");
-
+*/
    } // End of the main method
 
-   /**
+
+   /*
     * Create and persist a list of objects to the database.
     * @param entities   The list of entities to persist.  These can be any object that has been
     *                   properly annotated in JPA and marked as "persistable."  I specifically
     *                   used a Java generic so that I did not have to write this over and over.
     */
+   /*
    public <E> void createEntity(List <E> entities) {
       for (E next : entities) {
          LOGGER.info("Persisting: " + next);
@@ -467,38 +441,38 @@ public class BooksApp {
       }
    } // End of createEntity member method
 
-   private static List<Books> getBooks(){
+   private List<Books> getBooks(){
       return entityManager.createNamedQuery("getAllBooks", Books.class).getResultList();
    }
 
-   private static List<Publisher> getPublishers(){
+   private List<Publisher> getPublishers(){
       return entityManager.createNamedQuery("getAllPubs", Publisher.class).getResultList();
    }
 
-   private static List<AuthoringEntity> getAEs(){
+   private List<AuthoringEntity> getAEs(){
       return entityManager.createNamedQuery("getAllAE", AuthoringEntity.class).getResultList();
    }
 
-   private static List<AuthoringEntity> getAdHocTeams(){
+   private List<AuthoringEntity> getAdHocTeams(){
       return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"AdHocTeams").getResultList();
    }
 
-   private static List<AuthoringEntity> getIndividualAuthors(){
+   private List<AuthoringEntity> getIndividualAuthors(){
       return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"IndividualAuthors").getResultList();
+   }*/
+
+   private void addBook(Scanner in){
+
    }
 
-   private static void addBook(){
-
-   }
-
-   private static void deleteBook(EntityManager manager, Scanner scanner) {
+   private static void deleteBook(Scanner scanner) {
       boolean remove = true;
 
       while (remove) {
 
          System.out.println("Select book to delete(0 to quit): ");
          int i = 0;
-         for (Books book : bookList) {
+         for (Book book : bookList) {
             System.out.printf("%d. %s, %s%n", i + 1, book.getISBN(), book.getTitle());
             i++;
          }
@@ -513,17 +487,17 @@ public class BooksApp {
          if(choice == 0){
             remove = false;
          } else {
-            manager.remove(bookList.get(choice - 1));
+            //entityManager.remove(bookList.get(choice - 1));
             System.out.println("Book has been removed. ");
          }
       }
    }
 
-   private static void updateBook(){
+   private void updateBook(){
 
    }
 
-   public int checkInput(Scanner in, int low, int high)
+   private int checkInput(Scanner in, int low, int high)
    {
 
 
@@ -550,15 +524,12 @@ public class BooksApp {
                in.nextLine();
             }
          }
-
-
       }
-
 
       return returnedInt;
    }
 
-   public Publisher selectPublisher (Scanner in, List<Publisher> pubs)
+   private Publisher selectPublisher (Scanner in, List<Publisher> pubs)
    {
       System.out.println("Publishers:");
       for (int i  = 0; i < pubs.size(); i++)
@@ -577,7 +548,7 @@ public class BooksApp {
 
    }
 
-   public AuthoringEntity selectAE (Scanner in, List<AuthoringEntity> AE)
+   private AuthoringEntity selectAE (Scanner in, List<AuthoringEntity> AE)
    {
       System.out.println("Authoring Entity:");
       for (int i  = 0; i < AE.size(); i++)
@@ -610,7 +581,7 @@ public class BooksApp {
 
    }
 
-   public String checkStringLength(Scanner in, int length)
+   private String checkStringLength(Scanner in, int length)
    {
       String input;
     do {
@@ -624,5 +595,10 @@ public class BooksApp {
     return input;
    }
 
+   private <E> void validateEmpty(List<E> eList, String listName){
+      if(eList.size() == 0){
+         System.out.printf("Empty %s list%n", listName);
+      }
+   }
 
 } // End of Books class

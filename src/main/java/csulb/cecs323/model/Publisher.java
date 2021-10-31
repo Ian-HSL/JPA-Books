@@ -12,9 +12,25 @@ import java.util.List;
 @Entity
 
 @NamedNativeQuery(
-        name = "getAllPubs",
+        name = "GetAllPublishers",
         query = "SELECT * " +
                 "FROM Publishers ",
+        resultClass = Publisher.class
+)
+
+@NamedNativeQuery(
+        name = "GetPublisherByPhone",
+        query = "SELECT * " +
+                "FROM publishers " +
+                "WHERE phone = ?",
+        resultClass = Publisher.class
+)
+
+@NamedNativeQuery(
+        name = "GetPublisherByEmail",
+        query = "SELECT * " +
+                "FROM publishers " +
+                "WHERE email = ?",
         resultClass = Publisher.class
 )
 
@@ -25,13 +41,13 @@ public class Publisher {
     @OneToMany(fetch = FetchType.LAZY, mappedBy="pub",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<Books> books;
+    private List<Book> books;
 
-    public List<Books> getBooks() {
+    public List<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Books> books) {
+    public void setBooks(List<Book> books) {
         this.books = books;
     }
 
