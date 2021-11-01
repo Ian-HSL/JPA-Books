@@ -18,6 +18,13 @@ import javax.persistence.UniqueConstraint;
         resultClass = Books.class
 )
 
+@NamedNativeQuery(
+        name = "getBooksPK",
+        query = "SELECT ISBN " +
+                "FROM books ",
+        resultClass = Books.class
+)
+
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames =
                 {"title", "publisher_name"}),
@@ -116,5 +123,12 @@ public class Books {
                 "Title: " + t + "\n" +
                 "AE: " + AE.toString() +"\n" +
                 "Publisher: " + pub.toString() +"\n------------------------------------------";
+    }
+
+    public String printPK(){
+        String is = String.format("%-20s", ISBN);
+        String t = String.format("%-20s", title);
+        return  "ISBN: " + is + " | " +
+                "Title: " + t + "\n";
     }
 }

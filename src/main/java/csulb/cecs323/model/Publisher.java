@@ -18,6 +18,13 @@ import java.util.List;
         resultClass = Publisher.class
 )
 
+@NamedNativeQuery(
+        name = "getPubsPK",
+        query = "SELECT name " +
+                "FROM Publishers ",
+        resultClass = Publisher.class
+)
+
 @Table(name = "Publishers")
 public class Publisher {
 
@@ -105,5 +112,10 @@ public class Publisher {
                 ", phone='" + p + " | " +
                 ", email='" + mail + " " +
                 '}';
+    }
+
+    public String printPK()
+    {
+        return "Publisher name: " + this.name;
     }
 }

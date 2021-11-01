@@ -393,16 +393,34 @@ public class BooksApp {
                //publishers
                case 1:
                {
+                  List<Publisher> pubs = manager.createNamedQuery("getPubsPK", Publisher.class).getResultList();
+                  System.out.println("All Publishers Primary Key: ");
+                  for(int i = 0; i < pubs.size(); i++)
+                  {
+                     System.out.println( i + 1 + ". " + pubs.get(i).printPK());
+                  }
                   break;
                }
                //books
                case 2:
                {
+                  List<Books> books = manager.createNamedQuery("getBooksPK", Books.class).getResultList();
+                  System.out.println("All Books Primary Key: ");
+                  for(int i = 0; i < books.size(); i++)
+                  {
+                     System.out.println( i + 1 + ". " + books.get(i).printPK());
+                  }
                   break;
                }
                //authoring entities
                case 3:
                {
+                  List<AuthoringEntity> ae = manager.createNamedQuery("getAllAE", AuthoringEntity.class).getResultList();
+                  System.out.println("All Authoring Entity Primary Key: ");
+                  for(int i = 0; i < ae.size(); i++)
+                  {
+                     System.out.println( i + 1 + ". Email: " + ae.get(i).getEmail() + "\n Type: " + ae.get(i).getAuthoring_entity_type());
+                  }
                   break;
                }
             }
