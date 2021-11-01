@@ -24,6 +24,13 @@ import javax.persistence.UniqueConstraint;
                 "FROM books ",
         resultClass = Books.class
 )
+@NamedNativeQuery(
+        name = "findBook",
+        query = "SELECT * " +
+                "FROM Books " +
+                "WHERE title = ?" ,
+        resultClass = Books.class
+)
 
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames =

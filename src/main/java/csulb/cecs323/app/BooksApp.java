@@ -61,6 +61,8 @@ public class BooksApp {
 
    private static List<AuthoringEntity> AHTList;
    private static List<AuthoringEntity> individualAuthorsList;
+   private static List<AuthoringEntity> writingGroupList;
+
 
    public static void main(String[] args) {
       LOGGER.fine("Creating EntityManagerFactory and EntityManager");
@@ -74,6 +76,8 @@ public class BooksApp {
       AEList = getAEs();
       individualAuthorsList = getIndividualAuthors();
       AHTList = getAdHocTeams();
+      writingGroupList = getWritingGroup();
+
 
       if (bookList.size() == 0){
          System.out.println("Empty list");
@@ -88,6 +92,9 @@ public class BooksApp {
          System.out.println("Empty individual authors list");
       }
       if (AHTList.size() == 0){
+         System.out.println("Empty aht list");
+      }
+      if (writingGroupList.size() == 0){
          System.out.println("Empty aht list");
       }
 
@@ -342,23 +349,60 @@ public class BooksApp {
          //list info about object
          case 2:
          {
+            Scanner kb = new Scanner(System.in);
             System.out.println("Listing information about: ");
+            System.out.println("1. Publishers\n2. Books\n3. Writing Groups ");
             int listMenuChoice = booksApp.checkInput(in,1,3);
             switch(listMenuChoice)
             {
                //show list of publishers and select one?
                case 1:
                {
+                  System.out.println("Publishers: ");
+                  System.out.println("Select the publisher you want information about: ");
+                  int i =0;
+                  for(Publisher pub: publisherList)
+                  {
+                     System.out.printf("%d. %s%n", i+1, pub.getName());
+                     i++;
+                  }
+                  int choice = kb.nextInt();
+                  listPublishers(publisherList.get(choice-1));
                   break;
                }
                //show list of books and select one?
                case 2:
                {
+                  System.out.println("Books: ");
+                  System.out.println("Select the book you want information about: ");
+                  int i=0;
+                  for(Books book : bookList)
+                  {
+                     System.out.printf("%d. %s%n", i+1, book.getTitle());
+                     i++;
+                  }
+                  int choice = kb.nextInt();
+                  System.out.println("\nPublisher:");
+                  listPublishers(publisherList.get(choice-1));
+                  System.out.println("\nAuthoring Entity:");
+                  listAuth(AEList.get(choice-1));
+                  System.out.println("\nBook:");
+                  listBooks(bookList.get(choice-1));
                   break;
                }
                //show list of writing groups and select 1?
                case 3:
                {
+                  System.out.println("Writing Groups: ");
+                  System.out.println("Select the Writing Group you want information about: ");
+                  int i=0;
+                  for(AuthoringEntity wg: writingGroupList)
+                  {
+                     System.out.printf("%d. %s%n", i+1, wg.getName());
+                     i++;
+                  }
+                  int choice = kb.nextInt();
+                  listWritingGroup(writingGroupList.get(choice-1));
                   break;
                }
             }
@@ -516,6 +560,10 @@ public class BooksApp {
    private static List<AuthoringEntity> getIndividualAuthors(){
       return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"IndividualAuthors").getResultList();
    }
+   private static List<AuthoringEntity> getWritingGroup(){
+      return entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,"WritingGroup").getResultList();
+   }
+
 
    private static void addBook(){
 
@@ -628,6 +676,45 @@ public class BooksApp {
             break;
       }
    }
+
+
+   public static void listPublishers(Publisher publisher){
+      List <Publisher> first_publishers = entityManager.createNamedQuery("findPub", Publisher.class).setParameter(1,publisher.getName()).getResultList();
+      for(Publisher next: first_publishers)
+      {
+         System.out.printf("%s%n%s%n%s%n", "Publisher Name: " + next.getName(), "Publisher Phone Number: "+ next.getPhone(), "Publisher Email: " + next.getEmail());
+      }
+   }
+   public static void listBooks(Books book)
+   {
+      List <Books> books = entityManager.createNamedQuery("findBook", Books.class).setParameter(1,book.getTitle()).getResultList();
+      for(Books next: books)
+      {
+         System.out.printf("%s%n%s%n%s%n", "Book Title: " + next.getTitle(), "Book ISBN: "+ next.getISBN(), "Published Year: " + next.getYear_published());
+      }
+   }
+   public static void listAuth(AuthoringEntity auth)
+   {
+      List <AuthoringEntity> auth_books = entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,auth.getAuthoring_entity_type()).getResultList();
+      for(AuthoringEntity next: auth_books)
+      {
+
+         System.out.printf("%s%n%s%n%s%n", "Type: " + next.getAuthoring_entity_type(), "Name: "+ next.getName(), "Email: " + next.getEmail());
+      }
+   }
+   public static void listWritingGroup(AuthoringEntity wg)
+   {
+      List <AuthoringEntity> writing_group= entityManager.createNamedQuery("getAllSpecificMembers", AuthoringEntity.class).setParameter(1,wg.getAuthoring_entity_type()).getResultList();
+      for(AuthoringEntity next: writing_group)
+      {
+
+         System.out.printf("%s%n%s%n%s%n%s%n","Authoring Entity Name: "+ ((WritingGroup)wg).getName(), "Authoring Entity Email: " + ((WritingGroup)wg).getEmail(), "Head Writer: " +  ((WritingGroup)wg).getHead_writer(),"Year Formed: " +((WritingGroup)wg).getYear_formed() );
+         break;
+      }
+   }
+
+
+
 
    public int checkInput(Scanner in, int low, int high)
    {

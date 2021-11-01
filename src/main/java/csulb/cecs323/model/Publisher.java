@@ -24,6 +24,13 @@ import java.util.List;
                 "FROM Publishers ",
         resultClass = Publisher.class
 )
+@NamedNativeQuery(
+        name = "findPub",
+        query = "SELECT * " +
+                "FROM Publishers "+
+                "WHERE name = ?" ,
+        resultClass = Publisher.class
+)
 
 @Table(name = "Publishers")
 public class Publisher {
