@@ -349,45 +349,55 @@ public class BooksApp {
          //list info about object
          case 2:
          {
+            int choice=0;
             Scanner kb = new Scanner(System.in);
             System.out.println("Listing information about: ");
             System.out.println("1. Publishers\n2. Books\n3. Writing Groups ");
-            int listMenuChoice = booksApp.checkInput(in,1,3);
-            switch(listMenuChoice)
-            {
+            int listMenuChoice = booksApp.checkInput(in, 1, 3);
+            switch (listMenuChoice) {
                //show list of publishers and select one?
-               case 1:
-               {
+               case 1: {
                   System.out.println("Publishers: ");
                   System.out.println("Select the publisher you want information about: ");
-                  int i =0;
-                  for(Publisher pub: publisherList)
-                  {
-                     System.out.printf("%d. %s%n", i+1, pub.getName());
-                     i++;
-                  }
-                  int choice = kb.nextInt();
-                  listPublishers(publisherList.get(choice-1));
+                  do {
+                     try {
+                        int i = 0;
+                        for (Publisher pub : publisherList) {
+                           System.out.printf("%d. %s%n", i + 1, pub.getName());
+                           i++;
+                        }
+                        choice = kb.nextInt();
+                        listPublishers(publisherList.get(choice - 1));
+                     } catch (Exception e) {
+                        System.out.println("Not a valid publisher, please try again: ");
+                     }
+
+                  } while (choice<=0 || choice>publisherList.size());
                   break;
                }
+
                //show list of books and select one?
-               case 2:
-               {
+               case 2: {
                   System.out.println("Books: ");
                   System.out.println("Select the book you want information about: ");
-                  int i=0;
-                  for(Books book : bookList)
-                  {
-                     System.out.printf("%d. %s%n", i+1, book.getTitle());
-                     i++;
-                  }
-                  int choice = kb.nextInt();
-                  System.out.println("\nPublisher:");
-                  listPublishers(publisherList.get(choice-1));
-                  System.out.println("\nAuthoring Entity:");
-                  listAuth(AEList.get(choice-1));
-                  System.out.println("\nBook:");
-                  listBooks(bookList.get(choice-1));
+                  do {
+                     try {
+                        int i = 0;
+                        for (Books book : bookList) {
+                           System.out.printf("%d. %s%n", i + 1, book.getTitle());
+                           i++;
+                        }
+                        choice = kb.nextInt();
+                        System.out.println("\nPublisher:");
+                        listPublishers(publisherList.get(choice - 1));
+                        System.out.println("\nAuthoring Entity:");
+                        listAuth(AEList.get(choice - 1));
+                        System.out.println("\nBook:");
+                        listBooks(bookList.get(choice - 1));
+                     } catch (Exception e) {
+                        System.out.println("Not a valid book, please try again: ");
+                     }
+                  }while(choice<=0 || choice>bookList.size());
                   break;
                }
                //show list of writing groups and select 1?
@@ -395,15 +405,21 @@ public class BooksApp {
                {
                   System.out.println("Writing Groups: ");
                   System.out.println("Select the Writing Group you want information about: ");
-                  int i=0;
-                  for(AuthoringEntity wg: writingGroupList)
-                  {
-                     System.out.printf("%d. %s%n", i+1, wg.getName());
-                     i++;
-                  }
-                  int choice = kb.nextInt();
-                  listWritingGroup(writingGroupList.get(choice-1));
-                  break;
+                  do {
+                     try {
+                        int i = 0;
+                        for (AuthoringEntity wg : writingGroupList) {
+                           System.out.printf("%d. %s%n", i + 1, wg.getName());
+                           i++;
+                        }
+                        choice = kb.nextInt();
+                        listWritingGroup(writingGroupList.get(choice - 1));
+                        break;
+                     }catch (Exception e)
+                     {
+                        System.out.println("Not a valid Writing Group, please try again: ");
+                     }
+                  }while(choice<=0 || choice>bookList.size());
                }
             }
             break;
