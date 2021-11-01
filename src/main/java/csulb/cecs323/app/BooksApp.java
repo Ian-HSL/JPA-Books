@@ -95,7 +95,7 @@ public class BooksApp {
          System.out.println("Empty aht list");
       }
       if (writingGroupList.size() == 0){
-         System.out.println("Empty writing group list");
+         System.out.println("Empty writing group list ");
       }
 
       // Any changes to the database need to be done within a transaction.
