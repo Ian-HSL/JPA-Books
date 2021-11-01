@@ -15,10 +15,7 @@ package csulb.cecs323.app;
 // Import all of the entity classes that we have written for this application.
 import csulb.cecs323.model.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
@@ -378,8 +375,23 @@ public class BooksApp {
          case 4:
          {
             //show list of books. and select 1.
+            List<Books> books = manager.createNamedQuery("getAllBooks", Books.class).getResultList();
+            for(int i = 0; i < books.size(); i++)
+            {
+               System.out.println( i + ". " + books.get(i));
+            }
+            System.out.println("Hi: Please Select a book to update");
+            int bookNum = in.nextInt();
+            while(bookNum < 0 || bookNum >= books.size()) {
+               System.out.println("Invalid Number. Please input valid book number");
+               bookNum = in.nextInt();
+            }
+            Books book = books.get(bookNum);
+            System.out.println("Your book: " + book);
+            updateBook(book);
 
-            System.out.println("New AE for book: ");
+
+            System.out.println("New AE for book: " + book.getAE());
             break;
          }
          //list the primary key of all rows of something
@@ -537,8 +549,84 @@ public class BooksApp {
       }
    }
 
-   private static void updateBook(){
-
+   private static void updateBook(Books book){
+      Scanner scanner = new Scanner(System.in);
+      AuthoringEntity old = book.getAE();
+      System.out.println(old);
+      switch (old.getAuthoring_entity_type())
+      {
+         case "IndividualAuthors":
+            try
+            {
+               String ISBN = book.getISBN();
+               Query bookToUpdate = entityManager.createNamedQuery("findBookByISBN", Books.class)
+                       .setParameter(1,ISBN);
+               if (bookToUpdate.getMaxResults() != 0) {
+                  System.out.println("New Name:");
+                  String name = scanner.nextLine().trim();
+                  book.getAE().setName(name);
+                  book.setAE(book.getAE());
+                  entityManager.getTransaction().commit();
+                  System.out.println("The book has been updated.");
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+               System.out.println("fail to update");
+            }
+            break;
+         case "WritingGroup":
+            try
+            {
+               String ISBN = book.getISBN();
+               Query bookToUpdate = entityManager.createNamedQuery("findBookByISBN", Books.class)
+                       .setParameter(1,ISBN);
+               if (bookToUpdate.getMaxResults() != 0) {
+                  System.out.println("New Name:");
+                  String name = scanner.nextLine().trim();
+                  System.out.println("New Head Writer:");
+                  String hw = scanner.nextLine().trim();
+                  System.out.println("New Formed Year:");
+                  int fy = scanner.nextInt();
+                  WritingGroup wg = (WritingGroup) book.getAE();
+                  wg.setName(name);
+                  wg.setHead_writer(hw);
+                  wg.setYear_formed(fy);
+                  book.setAE(wg);
+                  entityManager.getTransaction().commit();
+                  System.out.println("The book has been updated.");
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+               System.out.println("Fail to update");
+            }
+            break;
+         case "AdHocTeams":
+            try
+            {
+               String ISBN = book.getISBN();
+               Query bookToUpdate = entityManager.createNamedQuery("findBookByISBN", Books.class)
+                       .setParameter(1,ISBN);
+               if (bookToUpdate.getMaxResults() != 0) {
+                  System.out.println("New Name:");
+                  String name = scanner.nextLine().trim();
+                  AdHocTeams aht = (AdHocTeams) book.getAE();
+                  aht.setName(name);
+                  book.setAE(aht);
+                  entityManager.getTransaction().commit();
+                  System.out.println("The book has been updated.");
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+               System.out.println("fail to update");
+            }
+            break;
+      }
    }
 
    public int checkInput(Scanner in, int low, int high)
