@@ -6,9 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
+/**
+ * Class that represents a book object by it's isbn, title, publisher etc like in a library*/
 @Entity
 
+/**
+ * This native query gets all the books currently in the database*/
 @NamedNativeQuery(
         name = "GetAllBooks",
         query = "SELECT * " +

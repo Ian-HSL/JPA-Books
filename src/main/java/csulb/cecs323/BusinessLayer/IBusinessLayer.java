@@ -6,7 +6,8 @@ import csulb.cecs323.model.AdHocTeam.AdHocTeamsMember;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
+/**
+ * Interface for handling data access with error handling*/
 public interface IBusinessLayer {
     /*
         Get all methods

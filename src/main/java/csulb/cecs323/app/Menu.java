@@ -1,5 +1,9 @@
 package csulb.cecs323.app;
 
+/**
+ * This class holds all the options to display in the console for the app for the user.
+ * They are all display functions.
+ * */
 public class Menu {
     Menu(){
 

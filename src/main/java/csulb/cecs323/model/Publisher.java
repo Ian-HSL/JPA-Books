@@ -11,7 +11,8 @@ import java.util.List;
 /**This is the publisher of books */
 
 @Entity
-
+/**
+ * Native query to get a list of all the publishers currently in the database*/
 @NamedNativeQuery(
         name = "GetAllPublishers",
         query = "SELECT * " +
@@ -19,6 +20,8 @@ import java.util.List;
         resultClass = Publisher.class
 )
 
+/**
+ * Native query to get a specific publisher by its name*/
 @NamedNativeQuery(
         name = "GetPublisherByName",
         query = "SELECT * " +
@@ -73,6 +76,7 @@ public class Publisher extends EntityClass{
         this.phone = phone;
     }
 
+    //displays the primary key formatted nicely
     public void displayPrimaryKey() {
         System.out.printf("Email: %s%n", email);;
     }

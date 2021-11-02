@@ -2,8 +2,12 @@ package csulb.cecs323.model;
 
 import javax.persistence.*;
 
+/**
+ * This class represents a group of writers where there is assumed one main writer that is known to the public*/
 @Entity
 
+/**
+ * Native Query where we get all the writing group authoring entites from the database*/
 @NamedNativeQuery(
         name = "GetAllWritingGroups",
         query = "SELECT * " +
@@ -16,11 +20,11 @@ import javax.persistence.*;
 public class WritingGroup extends AuthoringEntity
 {
     @Column(length = 80, name = "Head_Writer")
-    /** The Product Universal Product Code */
+    /** the main writer for this writing group. though other authors are not mentioned */
     private String headWriter;
 
     @Column(name = "year_formed")
-    /** The Product Universal Product Code */
+    /** year the group was formed */
     private int yearFormed;
 
     public WritingGroup(){};

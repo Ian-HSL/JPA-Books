@@ -21,7 +21,10 @@ import csulb.cecs323.model.AdHocTeam.AdHocTeamsMember;
 import javax.persistence.EntityManager;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
+/**
+ * Repositories to get all the objects from the database and store them/update them by
+ * calling data access methods with error handling exceptions.
+ * */
 public class BusinessLayer implements IBusinessLayer {
     private final IBookRepository _booksRepository;
     private final IPublisherRepository _publisherRepository;
@@ -42,7 +45,7 @@ public class BusinessLayer implements IBusinessLayer {
     }
 
     /*
-        Get all methods
+        Get all methods : gets a list of all objects of this description from database
     */
 
     public List<AuthoringEntity> getAllAuthoringEntities(){
@@ -70,6 +73,8 @@ public class BusinessLayer implements IBusinessLayer {
         All Add methods
     */
 
+    /**Adds publisher to database if it doesn't already exist
+     * @param newPublisher : new publisher to be added*/
     public void addPublisher(Publisher newPublisher){
         try{
             _publisherRepository.add(newPublisher);
@@ -77,7 +82,8 @@ public class BusinessLayer implements IBusinessLayer {
             System.out.println("Publisher already exists.");
         }
     }
-
+    /**Adds authoring entity to database if it doesn't already exist
+     * @param newAuthoringEntity: new authoring entity to be added*/
     public void addAuthoringEntity(AuthoringEntity newAuthoringEntity){
         try{
             _authoringRepository.add(newAuthoringEntity);
@@ -86,6 +92,8 @@ public class BusinessLayer implements IBusinessLayer {
         }
     }
 
+    /**Adds adhocteammember to database if it doesn't already exist
+     * @param newAdHocTeamMember : new ad hoc team member to be added*/
     public void addAdHocTeamMember(AdHocTeamsMember newAdHocTeamMember){
         try{
             _adHocTeamMemberRepository.add(newAdHocTeamMember);
@@ -97,10 +105,15 @@ public class BusinessLayer implements IBusinessLayer {
     /*
         Book methods
     */
+    /**
+     * Gets all the books from the database
+     * */
     public List<Book> getAllBooks(){
         return _booksRepository.getAll();
     }
 
+    /**Adds new book to database if it doesn't already exist
+     * @param newBook : new book to be added*/
     public void addBook(Book newBook) {
         try {
             _booksRepository.add(newBook);
@@ -109,10 +122,16 @@ public class BusinessLayer implements IBusinessLayer {
         }
     }
 
+    /**
+     * Deletes book from database
+     * @param book : book to be deleted from database*/
     public void deleteBook(Book book){
         _booksRepository.remove(book);
     }
 
+    /**
+     * updates book from database
+     * @param book : book to be updated in database*/
     public void updateBook(Book book){
         _booksRepository.update(book);
     }
@@ -121,6 +140,8 @@ public class BusinessLayer implements IBusinessLayer {
         All get single methods
     */
 
+    /**
+     * Gets a single publisher by its name */
     public Publisher getPublisherByName(String name){
         Object[] parameterList = new Object[1];
         parameterList[0] = name;
@@ -128,6 +149,8 @@ public class BusinessLayer implements IBusinessLayer {
         return _publisherRepository.getSingle("GetPublisherByName", parameterList);
     }
 
+    /**
+     * Gets an authoring entity from database by its name */
     public AuthoringEntity getAuthoringEntityByName(String name){
         Object[] parameterList = new Object[1];
         parameterList[0] = name;

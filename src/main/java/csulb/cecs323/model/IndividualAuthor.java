@@ -7,6 +7,8 @@ import javax.persistence.Entity;
  * may join an adhocteam and write books together as that adhocteam group name*/
 @Entity
 
+/**
+ * Native query that gets all the individual authors in the database only*/
 @NamedNativeQuery(
         name = "GetAllIndividualAuthors",
         query = "SELECT * " +

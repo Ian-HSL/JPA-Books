@@ -7,6 +7,9 @@ import javax.persistence.*;
 /** This class is an authoring entity, I guess some kind of group
  * or team that participates with other authors to write a book or many books*/
 @Entity
+
+/**
+ * Native Query to get authority entities that are only ad hot team members*/
 @NamedNativeQuery(
         name = "GetAllAdHocTeams",
         query = "SELECT * " +
@@ -20,6 +23,7 @@ import javax.persistence.*;
 public class AdHocTeam extends AuthoringEntity {
     public AdHocTeam(){};
 
+    //Constructors
     public AdHocTeam(String name, String email)
     {
         super.setEmail(email);
@@ -37,7 +41,8 @@ public class AdHocTeam extends AuthoringEntity {
     public String toString() {
         String mail = String.format("%-20s",this.getEmail());
         String name = String.format("%-20s", this.getName());
-        return "AdHocTeams{ " +
+        String aht = String.format("%-20s", "AdHocTeams{ ");
+        return aht +
                 "Email= " + mail + " | " +
                 "Name= " + name + " }" ;
     }

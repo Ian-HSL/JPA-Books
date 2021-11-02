@@ -10,6 +10,8 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="authoring_entity_type", discriminatorType = DiscriminatorType.STRING)
 
+/**
+ * This native query gets all authoring entities no matter which type they are*/
 @NamedNativeQuery(
         name = "GetAllAuthoringEntities",
         query = "SELECT * " +

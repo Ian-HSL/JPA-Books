@@ -5,7 +5,10 @@ import csulb.cecs323.model.Book;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
+/**
+ * Interface for generic type to list, update, add, remove whatever object types for this project*/
 public interface IGenericRepository<T> {
+
     List<T> getAll();
 
     List<T> getList(String query, Object[] parameterList);

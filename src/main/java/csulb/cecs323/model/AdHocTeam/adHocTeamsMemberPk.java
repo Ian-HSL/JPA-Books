@@ -5,6 +5,8 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * This defines the pk for adhocteammember*/
 @Embeddable
 public class adHocTeamsMemberPk implements Serializable {
 
@@ -30,7 +32,7 @@ public class adHocTeamsMemberPk implements Serializable {
             length = 30
 
     )
-    /**The name of the publisher*/
+    /**The name of individual author part of this ad hoc team*/
     private String Individual_Authors_Email;
     //private IndividualAuthors IA;
 
@@ -40,16 +42,11 @@ public class adHocTeamsMemberPk implements Serializable {
             length = 30
 
     )
-    /**The name of the publisher*/
+    /**The name of the ad hoc team group*/
     private String Ad_Hoc_Teams_Email;
     //private AdHocTeams AHT;
 
     public adHocTeamsMemberPk() {};
-//    public Ad_Hoc_Teams_Member_pk(String ia, String aht)
-//    {
-//        this.Individual_Authors_Email = ia;
-//        this.Ad_Hoc_Teams_Email = aht;
-//    }
 
     @Override
     public boolean equals(Object o) {
