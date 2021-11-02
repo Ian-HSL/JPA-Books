@@ -24,6 +24,22 @@ import javax.persistence.UniqueConstraint;
         resultClass = Book.class
 )
 
+@NamedNativeQuery(
+        name = "GetBookByTitleAndAuthoringEntityName",
+        query = "SELECT * " +
+                "FROM books " +
+                "WHERE title = ? AND authoring_entity_name = ? ",
+        resultClass = Book.class
+)
+
+@NamedNativeQuery(
+        name = "GetBookByTitleAndYear",
+        query = "SELECT * " +
+                "FROM books " +
+                "WHERE title = ? AND publisher_name = ? ",
+        resultClass = Book.class
+)
+
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames =
                 {"title", "publisher_name"}),
@@ -63,12 +79,12 @@ public class Book {
         this.title = title;
     }
 
-    public int getYear_published() {
-        return year_published;
+    public int getYearPublished() {
+        return yearPublished;
     }
 
-    public void setYear_published(int year_published) {
-        this.year_published = year_published;
+    public void setYearPublished(int yearPublished) {
+        this.yearPublished = yearPublished;
     }
 
 
@@ -97,9 +113,7 @@ public class Book {
     @Column(nullable = false
             )
     /**The year the book was published*/
-    private int year_published;
-
-
+    private int yearPublished;
 
     //Constructors
     public Book(){};
@@ -108,7 +122,7 @@ public class Book {
     {
         this.ISBN=ISBN;
         this.title= title;
-        this.year_published = year_published;
+        this.yearPublished = year_published;
 
         //inherits FK
         this.AE = AE;

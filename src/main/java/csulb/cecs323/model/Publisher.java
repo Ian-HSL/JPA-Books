@@ -55,11 +55,9 @@ public class Publisher {
     @Column(
             nullable = false,
             length = 80
-
     )
     /**The name of the publisher*/
     private String name;
-
 
     @Column(
             nullable = false,

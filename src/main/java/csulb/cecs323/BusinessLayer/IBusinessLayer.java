@@ -5,16 +5,34 @@ import csulb.cecs323.model.*;
 import java.util.List;
 
 public interface IBusinessLayer {
+    /*
+        Get all methods
+    */
     List<Book> getAllBooks();
 
-    Book getBookByISBN(String ISBN);
+    List<AuthoringEntity> getAllAuthoringEntities();
+
+    List<AdHocTeam> getAllAdHocTeams();
+
+    List<WritingGroup> getAllWritingGroups();
+
+    List<IndividualAuthors> getAllIndividualAuthors();
 
     List<Publisher> getAllPublishers();
-/*
-    List<AuthoringEntity> getAllAEs();
 
-    List<AuthoringEntity> getAllIndividualAuthors();
+    void deleteBook(String title, String publisherName, String authoringEntityName);
 
-    List<AuthoringEntity> getAllAdHocTeams();
- */
+
+    /*
+        All add methods
+    */
+
+    void addBook(Book book);
+
+    void addPublisher(Publisher newPublisher);
+
+    void addAuthoringEntity(AuthoringEntity authoringEntity);
+
+    void addAdHocTeamMember(AdHocTeamsMember newAdhocTeamMember);
+
 }

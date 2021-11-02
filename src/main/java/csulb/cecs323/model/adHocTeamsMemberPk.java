@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class Ad_Hoc_Teams_Member_pk implements Serializable {
+public class adHocTeamsMemberPk implements Serializable {
 
     public String getIndividual_Authors_Email() {
         return Individual_Authors_Email;
@@ -44,7 +44,7 @@ public class Ad_Hoc_Teams_Member_pk implements Serializable {
     private String Ad_Hoc_Teams_Email;
     //private AdHocTeams AHT;
 
-    public Ad_Hoc_Teams_Member_pk() {};
+    public adHocTeamsMemberPk() {};
 //    public Ad_Hoc_Teams_Member_pk(String ia, String aht)
 //    {
 //        this.Individual_Authors_Email = ia;
@@ -54,8 +54,8 @@ public class Ad_Hoc_Teams_Member_pk implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Ad_Hoc_Teams_Member_pk)) return false;
-        Ad_Hoc_Teams_Member_pk that = (Ad_Hoc_Teams_Member_pk) o;
+        if (!(o instanceof adHocTeamsMemberPk)) return false;
+        adHocTeamsMemberPk that = (adHocTeamsMemberPk) o;
         return Objects.equals(getIndividual_Authors_Email(), that.getIndividual_Authors_Email()) && Objects.equals(getAd_Hoc_Teams_Email(), that.getAd_Hoc_Teams_Email());
     }
 
