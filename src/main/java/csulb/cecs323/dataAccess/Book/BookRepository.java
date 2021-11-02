@@ -1,8 +1,8 @@
-package csulb.cecs323.dataAccess.repositories;
+package csulb.cecs323.dataAccess.Book;
 
 import javax.persistence.EntityManager;
 
-import csulb.cecs323.dataAccess.IRepositories.IBookRepository;
+import csulb.cecs323.dataAccess.Repository.Repository;
 import csulb.cecs323.model.Book;
 
 public class BookRepository extends Repository<Book> implements IBookRepository {

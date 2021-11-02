@@ -1,4 +1,6 @@
-package csulb.cecs323.model;
+package csulb.cecs323.model.AdHocTeam;
+
+import csulb.cecs323.model.IndividualAuthor;
 
 import javax.persistence.*;
 
@@ -13,7 +15,7 @@ public class AdHocTeamsMember
     @ManyToOne
     @JoinColumn(nullable = false, name = "Individual_Authors_Email", referencedColumnName = "email")
     /**The name of the publisher*/
-    private IndividualAuthors individualAuthor;
+    private IndividualAuthor individualAuthor;
 
 
     @MapsId("Ad_Hoc_Teams_Email")
@@ -24,13 +26,13 @@ public class AdHocTeamsMember
 
     public AdHocTeamsMember(){};
 
-    public AdHocTeamsMember(AdHocTeam aht, IndividualAuthors ia)
+    public AdHocTeamsMember(AdHocTeam aht, IndividualAuthor ia)
     {
         this.individualAuthor = ia;
         this.adHocTeam = aht;
     }
 
-    public void setIndividualAuthor(IndividualAuthors individualAuthor){
+    public void setIndividualAuthor(IndividualAuthor individualAuthor){
         this.individualAuthor = individualAuthor;
     }
 

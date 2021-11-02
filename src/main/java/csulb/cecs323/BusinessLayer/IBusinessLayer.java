@@ -1,14 +1,16 @@
 package csulb.cecs323.BusinessLayer;
 
 import csulb.cecs323.model.*;
+import csulb.cecs323.model.AdHocTeam.AdHocTeam;
+import csulb.cecs323.model.AdHocTeam.AdHocTeamsMember;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public interface IBusinessLayer {
     /*
         Get all methods
     */
-    List<Book> getAllBooks();
 
     List<AuthoringEntity> getAllAuthoringEntities();
 
@@ -16,11 +18,9 @@ public interface IBusinessLayer {
 
     List<WritingGroup> getAllWritingGroups();
 
-    List<IndividualAuthors> getAllIndividualAuthors();
+    List<IndividualAuthor> getAllIndividualAuthors();
 
     List<Publisher> getAllPublishers();
-
-    void deleteBook(String title, String publisherName, String authoringEntityName);
 
 
     /*
@@ -35,4 +35,13 @@ public interface IBusinessLayer {
 
     void addAdHocTeamMember(AdHocTeamsMember newAdhocTeamMember);
 
+
+    /*
+        Book methods
+    */
+    List<Book> getAllBooks();
+
+    void deleteBook(Book book);
+
+    void updateBook(Book book);
 }

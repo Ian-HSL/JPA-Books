@@ -1,6 +1,6 @@
-package csulb.cecs323.dataAccess.repositories;
+package csulb.cecs323.dataAccess.Publisher;
 
-import csulb.cecs323.dataAccess.IRepositories.IPublisherRepository;
+import csulb.cecs323.dataAccess.Repository.Repository;
 import csulb.cecs323.model.Publisher;
 
 import javax.persistence.EntityManager;

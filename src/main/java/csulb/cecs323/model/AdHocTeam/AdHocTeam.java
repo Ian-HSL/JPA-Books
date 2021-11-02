@@ -1,4 +1,6 @@
-package csulb.cecs323.model;
+package csulb.cecs323.model.AdHocTeam;
+
+import csulb.cecs323.model.AuthoringEntity;
 
 import javax.persistence.*;
 
@@ -9,11 +11,11 @@ import javax.persistence.*;
         name = "GetAllAdHocTeams",
         query = "SELECT * " +
                 "FROM authoring_entities " +
-                "WHERE authoring_entity_type = 'Ad Hoc Teams'",
+                "WHERE authoring_entity_type = 'Ad Hoc Team'",
         resultClass = AdHocTeam.class
 )
 
-@DiscriminatorValue(value = "Ad Hoc Teams")
+@DiscriminatorValue(value = "Ad Hoc Team")
 @Table(name = "Ad_Hoc_Teams")
 public class AdHocTeam extends AuthoringEntity {
     public AdHocTeam(){};
@@ -21,8 +23,14 @@ public class AdHocTeam extends AuthoringEntity {
     public AdHocTeam(String name, String email)
     {
         super.setEmail(email);
-        super.setAuthoringEntityType("Ad Hoc Teams");
+        super.setAuthoringEntityType("Ad Hoc Team");
         super.setName(name);
+    }
+
+    public AdHocTeam(AuthoringEntity entity){
+        super.setEmail(entity.getEmail());
+        super.setAuthoringEntityType("Ad Hoc Team");
+        super.setName(entity.getName());
     }
 
     @Override

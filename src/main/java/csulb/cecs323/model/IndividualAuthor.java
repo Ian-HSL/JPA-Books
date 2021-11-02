@@ -1,16 +1,26 @@
 package csulb.cecs323.model;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 
 /**This is a class of individual authors that write books on their own. They
  * may join an adhocteam and write books together as that adhocteam group name*/
 @Entity
-@DiscriminatorValue(value = "Individual Authors")
-public class IndividualAuthors extends AuthoringEntity {
-    //Constructors
-    public IndividualAuthors(){};
 
-    public IndividualAuthors(String name, String email)
+@NamedNativeQuery(
+        name = "GetAllIndividualAuthors",
+        query = "SELECT * " +
+                "FROM Authoring_Entities " +
+                "WHERE authoring_entity_type = 'Individual Authors'",
+        resultClass = IndividualAuthor.class
+)
+
+@DiscriminatorValue(value = "Individual Authors")
+public class IndividualAuthor extends AuthoringEntity {
+    //Constructors
+    public IndividualAuthor(){};
+
+    public IndividualAuthor(String name, String email)
     {
         super.setEmail(email);
         super.setAuthoringEntityType("Individual Authors");

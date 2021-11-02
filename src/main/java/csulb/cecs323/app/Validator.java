@@ -43,10 +43,4 @@ public class Validator {
 
         return returnedInt;
     }
-
-    public static  <E> void validateEmpty(List<E> eList, String listName){
-        if(eList.size() == 0){
-            System.out.printf("Empty %s list%n", listName);
-        }
-    }
 }

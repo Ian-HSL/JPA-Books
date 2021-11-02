@@ -1,7 +1,6 @@
-package csulb.cecs323.dataAccess.IRepositories;
+package csulb.cecs323.dataAccess.Book;
 
+import csulb.cecs323.dataAccess.Repository.IGenericRepository;
 import csulb.cecs323.model.Book;
-
-import java.util.List;
 
 public interface IBookRepository extends IGenericRepository<Book> {}

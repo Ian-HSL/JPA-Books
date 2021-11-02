@@ -16,37 +16,60 @@ import javax.persistence.UniqueConstraint;
         resultClass = Book.class
 )
 
-@NamedNativeQuery(
-        name = "GetBookByISBN",
-        query = "SELECT *" +
-                "FROM books " +
-                "WHERE ISBN = ? ",
-        resultClass = Book.class
-)
-
-@NamedNativeQuery(
-        name = "GetBookByTitleAndAuthoringEntityName",
-        query = "SELECT * " +
-                "FROM books " +
-                "WHERE title = ? AND authoring_entity_name = ? ",
-        resultClass = Book.class
-)
-
-@NamedNativeQuery(
-        name = "GetBookByTitleAndYear",
-        query = "SELECT * " +
-                "FROM books " +
-                "WHERE title = ? AND publisher_name = ? ",
-        resultClass = Book.class
-)
-
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames =
                 {"title", "publisher_name"}),
                 @UniqueConstraint(columnNames = {"title","authoring_entity_name"})},
         name = "Books"
 )
-public class Book {
+public class Book extends EntityClass{
+    /**This denotes that each book has a valid existing author*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "authoring_entity_name", referencedColumnName = "email")
+    private AuthoringEntity AE;
+
+    /**This denotes that each book has a valid existing publishser*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "publisher_name", referencedColumnName = "name")
+    private Publisher pub;
+
+    @Id
+    @Column(nullable = false,
+            length = 17,
+            name = "ISBN")
+    /**The unique code identifier of the book*/
+    private String ISBN;
+
+    @Column(nullable = false,
+            length = 80,
+            name = "title")
+    /**The name/title of the book*/
+    private String title;
+
+    @Column(nullable = false,
+            name = "year_published"
+            )
+    /**The year the book was published*/
+    private int yearPublished;
+
+    //Constructors
+    public Book(){}
+
+    public Book(String ISBN, String title, int year_published, AuthoringEntity AE, Publisher pub)
+    {
+        this.ISBN=ISBN;
+        this.title= title;
+        this.yearPublished = year_published;
+
+        //inherits FK
+        this.AE = AE;
+        this.pub = pub;
+    }
+
+    public void displayPrimaryKey() {
+        System.out.println("ISBN: " + ISBN);
+    }
+
     public AuthoringEntity getAE() {
         return AE;
     }
@@ -85,48 +108,6 @@ public class Book {
 
     public void setYearPublished(int yearPublished) {
         this.yearPublished = yearPublished;
-    }
-
-
-
-    /**This denotes that each book has a valid existing author*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "authoring_entity_name", referencedColumnName = "email")
-    private AuthoringEntity AE;
-
-    /**This denotes that each book has a valid existing publishser*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "publisher_name", referencedColumnName = "name")
-    private Publisher pub;
-
-    @Id
-    @Column(nullable = false,
-            length = 17)
-    /**The unique code identifier of the book*/
-    private String ISBN;
-
-    @Column(nullable = false,
-            length = 80)
-    /**The name/title of the book*/
-    private String title;
-
-    @Column(nullable = false
-            )
-    /**The year the book was published*/
-    private int yearPublished;
-
-    //Constructors
-    public Book(){};
-
-    public Book(String ISBN, String title, int year_published, AuthoringEntity AE, Publisher pub)
-    {
-        this.ISBN=ISBN;
-        this.title= title;
-        this.yearPublished = year_published;
-
-        //inherits FK
-        this.AE = AE;
-        this.pub = pub;
     }
 
     @Override

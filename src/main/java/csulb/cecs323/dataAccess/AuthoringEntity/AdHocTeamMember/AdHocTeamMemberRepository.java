@@ -1,7 +1,7 @@
-package csulb.cecs323.dataAccess.repositories;
+package csulb.cecs323.dataAccess.AuthoringEntity.AdHocTeamMember;
 
-import csulb.cecs323.dataAccess.IRepositories.IAdHocTeamMemberRepository;
-import csulb.cecs323.model.AdHocTeamsMember;
+import csulb.cecs323.dataAccess.Repository.Repository;
+import csulb.cecs323.model.AdHocTeam.AdHocTeamsMember;
 
 import javax.persistence.EntityManager;
 

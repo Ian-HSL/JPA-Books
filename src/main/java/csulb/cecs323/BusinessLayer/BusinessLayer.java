@@ -1,51 +1,65 @@
 package csulb.cecs323.BusinessLayer;
 
-import csulb.cecs323.dataAccess.IRepositories.IAdHocTeamMemberRepository;
-import csulb.cecs323.dataAccess.IRepositories.IAuthoringEntityRepository;
-import csulb.cecs323.dataAccess.IRepositories.IBookRepository;
-import csulb.cecs323.dataAccess.IRepositories.IPublisherRepository;
-import csulb.cecs323.dataAccess.repositories.AdHocTeamMemberRepository;
-import csulb.cecs323.dataAccess.repositories.AuthoringEntityRepository;
-import csulb.cecs323.dataAccess.repositories.BookRepository;
-import csulb.cecs323.dataAccess.repositories.PublisherRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.AdHocTeamMember.IAdHocTeamMemberRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.AdHocTeam.AdHocTeamRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.AdHocTeam.IAdHocTeamRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.IAuthoringEntityRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.IndividualAuthor.IIndividualAuthorRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.IndividualAuthor.IndividualAuthorRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.WritingGroup.WritingGroupRepository;
+import csulb.cecs323.dataAccess.Book.IBookRepository;
+import csulb.cecs323.dataAccess.Publisher.IPublisherRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.AdHocTeamMember.AdHocTeamMemberRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.AuthoringEntityRepository;
+import csulb.cecs323.dataAccess.Book.BookRepository;
+import csulb.cecs323.dataAccess.Publisher.PublisherRepository;
+import csulb.cecs323.dataAccess.AuthoringEntity.WritingGroup.IWritingGroupRepository;
 import csulb.cecs323.model.*;
+import csulb.cecs323.model.AdHocTeam.AdHocTeam;
+import csulb.cecs323.model.AdHocTeam.AdHocTeamsMember;
 
 import javax.persistence.EntityManager;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 public class BusinessLayer implements IBusinessLayer {
-
     private final IBookRepository _booksRepository;
     private final IPublisherRepository _publisherRepository;
     private final IAuthoringEntityRepository _authoringRepository;
     private final IAdHocTeamMemberRepository _adHocTeamMemberRepository;
+    private final IWritingGroupRepository _writingGroupRepository;
+    private final IAdHocTeamRepository _adHocTeamRepository;
+    private final IIndividualAuthorRepository _individualRepository;
 
     public BusinessLayer(EntityManager manager){
         _booksRepository = new BookRepository(manager);
         _publisherRepository = new PublisherRepository(manager);
         _authoringRepository = new AuthoringEntityRepository(manager);
         _adHocTeamMemberRepository = new AdHocTeamMemberRepository(manager);
+        _writingGroupRepository = new WritingGroupRepository(manager);
+        _adHocTeamRepository = new AdHocTeamRepository(manager);
+        _individualRepository = new IndividualAuthorRepository(manager);
     }
 
     /*
         Get all methods
     */
 
-    public List<Book> getAllBooks(){
-        return _booksRepository.getAll();
+    public List<AuthoringEntity> getAllAuthoringEntities(){
+        return _authoringRepository.getAll();
     }
 
-    public List<AuthoringEntity> getAllAuthoringEntities(){ return _authoringRepository.getAll();}
-
     public List<AdHocTeam> getAllAdHocTeams(){
-        return _authoringRepository.getAllAdHocTeams();
+        return _adHocTeamRepository.getAll();
     }
 
     public List<WritingGroup> getAllWritingGroups(){
-        return _authoringRepository.getAllWritingGroups();
+        return _writingGroupRepository.getAll();
     }
 
-    public List<IndividualAuthors> getAllIndividualAuthors(){ return _authoringRepository.getAllIndividualAuthors();}
+    public List<IndividualAuthor> getAllIndividualAuthors(){
+        return _individualRepository.getAll();
+    }
 
     public List<Publisher> getAllPublishers(){
         return _publisherRepository.getAll();
@@ -53,64 +67,71 @@ public class BusinessLayer implements IBusinessLayer {
 
 
     /*
-        Add methods
+        All Add methods
     */
-
-    public void addBook(Book newBook){
-        _booksRepository.add(newBook);
-    }
 
     public void addPublisher(Publisher newPublisher){
-        _publisherRepository.add(newPublisher);
-    }
-
-    public void addAuthoringEntity(AuthoringEntity newAuthoringEntity){
-        _authoringRepository.add(newAuthoringEntity);
-    }
-
-    public void addAdHocTeamMember(AdHocTeamsMember newAdHocTeamMember){
-        _adHocTeamMemberRepository.add(newAdHocTeamMember);
-    }
-
-    /*
-        Get book methods
-    */
-
-    public Book getBookByISBN(String ISBN){
-        Object[] parameterList = new Object[1];
-        parameterList[0] = ISBN;
-
-        return _booksRepository.getSingle("GetBookByISBN", parameterList);
-    }
-
-    public Book getBookByTitleAndAuthoringEntityName(String title, String yearPublished){
-        Object[] parameterList = new Object[2];
-        parameterList[0] = title;
-        parameterList[1] = yearPublished;
-
-        return _booksRepository.getSingle("GetBookByTitleAndYear", parameterList);
-    }
-
-    public Book getBookByTitleAndPublisher(String title, String publisherName){
-        Object[] parameterList = new Object[2];
-        parameterList[0] = title;
-        parameterList[1] = publisherName;
-
-        return _booksRepository.getSingle("GetBookByTitleAndPublisher", parameterList);
-    }
-
-    public void deleteBook(String title, String publisherName, String authoringEntityName){
-        try {
-            // Just evaluate the first candidate key
-            Book book = getBookByTitleAndPublisher(title, publisherName);
-
-            _booksRepository.remove(book);
+        try{
+            _publisherRepository.add(newPublisher);
         } catch (Exception e){
-            System.out.println("Book does not exist.");
+            System.out.println("Publisher already exists.");
         }
     }
 
+    public void addAuthoringEntity(AuthoringEntity newAuthoringEntity){
+        try{
+            _authoringRepository.add(newAuthoringEntity);
+        } catch (Exception e){
+            System.out.println("Authoring entity already exists. ");
+        }
+    }
 
+    public void addAdHocTeamMember(AdHocTeamsMember newAdHocTeamMember){
+        try{
+            _adHocTeamMemberRepository.add(newAdHocTeamMember);
+        } catch (Exception e){
+            System.out.println("Author already in team. ");
+        }
+    }
 
+    /*
+        Book methods
+    */
+    public List<Book> getAllBooks(){
+        return _booksRepository.getAll();
+    }
 
+    public void addBook(Book newBook) {
+        try {
+            _booksRepository.add(newBook);
+        } catch (Exception e){
+            System.out.println("Book already exists. ");
+        }
+    }
+
+    public void deleteBook(Book book){
+        _booksRepository.remove(book);
+    }
+
+    public void updateBook(Book book){
+        _booksRepository.update(book);
+    }
+
+    /*
+        All get single methods
+    */
+
+    public Publisher getPublisherByName(String name){
+        Object[] parameterList = new Object[1];
+        parameterList[0] = name;
+
+        return _publisherRepository.getSingle("GetPublisherByName", parameterList);
+    }
+
+    public AuthoringEntity getAuthoringEntityByName(String name){
+        Object[] parameterList = new Object[1];
+        parameterList[0] = name;
+
+        return _authoringRepository.getSingle("GetAuthoringEntityByName", parameterList);
+    }
 }

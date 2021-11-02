@@ -1,4 +1,4 @@
-package csulb.cecs323.model;
+package csulb.cecs323.model.AdHocTeam;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
