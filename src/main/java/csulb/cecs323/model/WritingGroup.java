@@ -1,63 +1,70 @@
 package csulb.cecs323.model;
 
-import csulb.cecs323.model.AuthoringEntity;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+/**
+ * This class represents a group of writers where there is assumed one main writer that is known to the public*/
+@Entity
 
-@Entity//(name = "WritingGroup")
-@DiscriminatorValue(value = "WritingGroup")
+/**
+ * Native Query where we get all the writing group authoring entites from the database*/
+@NamedNativeQuery(
+        name = "GetAllWritingGroups",
+        query = "SELECT * " +
+                "FROM Authoring_Entities " +
+                "WHERE authoring_entity_type = 'Writing Group'",
+        resultClass = WritingGroup.class
+)
+
+@DiscriminatorValue(value = "Writing Group")
 public class WritingGroup extends AuthoringEntity
 {
-    public String getHead_writer() {
-        return head_writer;
-    }
+    @Column(length = 80, name = "Head_Writer")
+    /** the main writer for this writing group. though other authors are not mentioned */
+    private String headWriter;
 
-    public void setHead_writer(String head_writer) {
-        this.head_writer = head_writer;
-    }
-
-    @Column(length = 80)
-    /** The Product Universal Product Code */
-    private String head_writer;
-
-    public int getYear_formed() {
-        return year_formed;
-    }
-
-    public void setYear_formed(int year_formed) {
-        this.year_formed = year_formed;
-    }
-
-    @Column
-    /** The Product Universal Product Code */
-    private int year_formed;
+    @Column(name = "year_formed")
+    /** year the group was formed */
+    private int yearFormed;
 
     public WritingGroup(){};
 
     public WritingGroup(String email, String name, String head_writer, int year_formed)
     {
-        //super(email, authoringEntityType, name/**,head_writer,year_formed*/);
         super.setEmail(email);
-        super.setAuthoring_entity_type("WritingGroup");
+        super.setAuthoringEntityType("Writing Group");
         super.setName(name);
-        this.head_writer = head_writer;
-        this.year_formed = year_formed;
+        this.setHeadWriter(head_writer);
+        this.setYearFormed(year_formed);
+    }
+
+    public String getHeadWriter() {
+        return headWriter;
+    }
+
+    public int getYearFormed() {
+        return yearFormed;
+    }
+
+    public void setHeadWriter(String head_writer) {
+        this.headWriter = head_writer;
+    }
+
+    public void setYearFormed(int year_formed) {
+        this.yearFormed = year_formed;
     }
 
     @Override
     public String toString() {
         String n = String.format("%-20s", this.getName());
         String e = String.format("%-20s", this.getEmail());
-        String hw = String.format("%-20s", head_writer);
+        String hw = String.format("%-20s", headWriter);
 
         return "WritingGroup{" +
                 "Email= " + this.getEmail() + " | " +
                 "Name= " + n + " | " +
-                "head_writer= " + head_writer + " | " +
-                "year_formed= " + year_formed +
+                "head_writer= " + headWriter + " | " +
+                "year_formed= " + yearFormed +
                 '}';
     }
 }

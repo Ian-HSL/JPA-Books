@@ -1,12 +1,14 @@
-package csulb.cecs323.model;
+package csulb.cecs323.model.AdHocTeam;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * This defines the pk for adhocteammember*/
 @Embeddable
-public class Ad_Hoc_Teams_Member_pk implements Serializable {
+public class adHocTeamsMemberPk implements Serializable {
 
     public String getIndividual_Authors_Email() {
         return Individual_Authors_Email;
@@ -30,7 +32,7 @@ public class Ad_Hoc_Teams_Member_pk implements Serializable {
             length = 30
 
     )
-    /**The name of the publisher*/
+    /**The name of individual author part of this ad hoc team*/
     private String Individual_Authors_Email;
     //private IndividualAuthors IA;
 
@@ -40,22 +42,17 @@ public class Ad_Hoc_Teams_Member_pk implements Serializable {
             length = 30
 
     )
-    /**The name of the publisher*/
+    /**The name of the ad hoc team group*/
     private String Ad_Hoc_Teams_Email;
     //private AdHocTeams AHT;
 
-    public Ad_Hoc_Teams_Member_pk() {};
-//    public Ad_Hoc_Teams_Member_pk(String ia, String aht)
-//    {
-//        this.Individual_Authors_Email = ia;
-//        this.Ad_Hoc_Teams_Email = aht;
-//    }
+    public adHocTeamsMemberPk() {};
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Ad_Hoc_Teams_Member_pk)) return false;
-        Ad_Hoc_Teams_Member_pk that = (Ad_Hoc_Teams_Member_pk) o;
+        if (!(o instanceof adHocTeamsMemberPk)) return false;
+        adHocTeamsMemberPk that = (adHocTeamsMemberPk) o;
         return Objects.equals(getIndividual_Authors_Email(), that.getIndividual_Authors_Email()) && Objects.equals(getAd_Hoc_Teams_Email(), that.getAd_Hoc_Teams_Email());
     }
 
